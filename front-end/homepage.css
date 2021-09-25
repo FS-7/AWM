@@ -46,6 +46,7 @@
     float: right;
     display: block;
     width: 380px;
+    height: 100%;
 }
 
 .lower-left
@@ -56,15 +57,22 @@
     padding: 0; 
 }
 
-#map
-{
-    height: 400px; 
-    width: 600px; 
-}
-
 .lower-right{
     float: right;
     display: block;
     width: 380px;
-    height: 400px;
+    height: 100%;
+}
+
+.mec_list, .mec_list2{
+    margin: 0px 0px 0px 0px; 
+    padding: 0;
+    width: 230px;
+    text-align: center;
+}
+
+#map
+{
+    height: 400px; 
+    width: 600px; 
 }

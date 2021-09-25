@@ -12,19 +12,6 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
     </head>
-    <?php
-    $conn = mysqli_connect("localhost", "root", "", "awm");
-    $q = mysqli_query($conn, "SELECT `name`, `phone_no` FROM `mechanic`");
-    $q2 = mysqli_query($conn, "select 'rating' from feedback");
-    
-    while ($row= mysqli_fetch_array($q)) {
-        $name = $row['name'];
-        $phone_no = $row['phone_no'];    
-    }
-    while ($row2= mysqli_fetch_array($q2)) {
-        echo $row2['rating'];
-    }
-    ?>
     <body>
         <center>
         <div class="header">
@@ -52,7 +39,6 @@
                 <!--MAPS-->
                 <div class="lower-left" id="map"></div>
                 <script>
-                    var coords
                     const platform = new H.service.Platform({ apikey: 'RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw' });
                     const defaultLayers = platform.createDefaultLayers();
                     const map = new H.Map(document.getElementById('map'),
@@ -78,43 +64,39 @@
                             map.addObject(marker);
                             map.setCenter(LocOfMarker);
                         }); 
-                    }
-                    
+                    }    
                 </script>
                 
                 <!--mechanic list-->
                 <div class="lower-right" placeholder="list"> 
-                <table>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr>
-                                <td>Image
-                                    <img src="">
-                                </td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>X<input type="text" name="x" id="x"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Y<input type="text" name="y" id="y"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><?php echo "Location: " ?></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                </tr>    
-                            </table>
-                        </td>
-                    </tr>
-                </table>    
+                <span>SORT BY: </span>
+                    <select>
+                        <option value="Name">Name</option>
+                        <option value="Distance">Distance</option> 
+                    </select><br><br>
+                <?php
+                $conn = mysqli_connect("localhost", "root", "", "awm");
+                $q = mysqli_query($conn, "SELECT name, phone_no, rating FROM mechanic, feedback, service_log where feedback.request_id = service_log.request_id and mechanic.id_no = service_log.m_id order by mechanic.name;");
+                echo "<table class='mec_list' border=2px><tr><td>";
+                while ($row= mysqli_fetch_array($q)) {
+                echo "<table><tr><td>";
+                echo "<img src='../img/awm.jpg' height='75px' width='75px'>";
+                echo "</td><td><table class='mec_list2'><tr><td>";
+                echo "Name: ".$row['name'];
+                echo "</td></tr><tr><td>";
+                echo "Phone: ".$row['phone_no'];
+                echo "</td></tr><tr><td>";
+                echo "Distance: ";
+                echo "</td></tr></table></td><td>";
+                echo "<input type='button' name='submit' value='Book'/><br> Rating: ".$row['rating'];
+                echo "</td></tr></table>";
+                }
+                echo "</td></tr></table>";
+                ?>    
                 <script>
-                    var x = document.getElementById('x');
-                    var y = document.getElementById('y');
+                    var x,y;
                     map.addEventListener('tap', function(evt) {
-                    x.value=evt.currentPointer.viewportX, y.value=evt.currentPointer.viewportY
+                    x=evt.currentPointer.viewportX, y=evt.currentPointer.viewportY
                     });
                 </script>
                 
