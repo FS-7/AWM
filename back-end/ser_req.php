@@ -15,8 +15,8 @@
         }
         else
         {
-            $conn = mysqli_connect('localhost','root','','AWM');//only xampp
-            $query = "insert into service_req values('null','$cid','$mid','$c_email','$c_phone','$c_loc')";
+            $conn = mysqli_connect('localhost','root','','awm');//only xampp
+            $query = "insert into service_req values('$cid','$mid','$c_email','$c_phone','$c_loc','null')";
             $q = mysqli_query($query,$conn);
             if(!$q)
             {

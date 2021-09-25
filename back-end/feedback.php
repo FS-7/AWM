@@ -4,6 +4,7 @@
    </head> 
    <body>
        <?php
+        $req_id = $_POST[''];
         $date = $_POST[''];
         $rate = $_POST[''];
         $desc = $_POST[''];
@@ -13,8 +14,8 @@
         }
         else
         {
-            $conn = mysqli_connect('localhost','root','','AWM');//only xampp
-            $query = "insert into feedback values('$date','$rate','$desc')";
+            $conn = mysqli_connect('localhost','root','','awm');//only xampp
+            $query = "insert into feedback values('$req_id','$rate','$desc','$date')";
             $q = mysqli_query($query,$conn);
             if(!$q)
             {

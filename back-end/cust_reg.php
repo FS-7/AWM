@@ -15,8 +15,8 @@
         }
         else
         {
-            $conn = mysqli_connect('localhost','root','','AWM');//only xampp
-            $query = "insert into customer values('null','$name','$email','$phone','$pass','$vehicle')";
+            $conn = mysqli_connect('localhost','root','','awm'); //only XAMPP
+            $query = "insert into customer values('null','$name','$phone','$email','$pass','$vehicle')";
             $q = mysqli_query($query,$conn);
             if(!$q)
             {

@@ -16,8 +16,8 @@
         }
         else
         {
-            $conn = mysqli_connect('localhost','root','','AWM');//only xampp
-            $query = "insert into mechanic values('null','$name','$email','$phone','$pass','$vehicle','$gov_id')";
+            $conn = mysqli_connect('localhost','root','','awm');//only xampp
+            $query = "insert into mechanic values('null','$gov_id','$name','$phone','$email','$pass','$vehicle')";
             $q = mysqli_query($query,$conn);
             if(!$q)
             {

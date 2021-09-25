@@ -1,0 +1,70 @@
+.body
+{
+    height: 550px;
+    width: 1000px;
+}
+
+.upper{
+    width: 1000px;
+    height: 200px;
+}
+
+.lower{
+    width: 1000px;
+    height: 400px;
+}
+.upper-left {
+    margin-top: 75px;
+    width: 600px;
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #ccc;
+}
+
+.upper-left input[type=text] {
+    width: 550px;
+    background-color: #ddd;
+    padding: 6px;
+    font-size: 17px;
+    border: none;
+}
+
+.upper-left button {
+    float: right;
+    padding: 6px 10px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+
+.upper-left button:hover {
+    background: #ccc;
+}
+
+.upper-right{
+    float: right;
+    display: block;
+    width: 380px;
+}
+
+.lower-left
+{ 
+    float: left;
+    border: 1px solid black; 
+    margin: 0px 0px 0px 0px; 
+    padding: 0; 
+}
+
+#map
+{
+    height: 400px; 
+    width: 600px; 
+}
+
+.lower-right{
+    float: right;
+    display: block;
+    width: 380px;
+    height: 400px;
+}
