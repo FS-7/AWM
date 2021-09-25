@@ -44,7 +44,7 @@
                     const map = new H.Map(document.getElementById('map'),
                     defaultLayers.vector.normal.map, {
                         center: { lat: 15.333, lng: 75 },
-                        zoom: 14,
+                        zoom: 10,
                         pixelRatio: window.devicePixelRatio || 1
                     });
                     window.addEventListener('resize', () => map.getViewPort().resize());
@@ -53,6 +53,7 @@
 
                     //geocoding
                     function Marker() {
+                        var x,y;
                         var add = document.getElementById('search').value;
                         const searchText = add;
                         const geocoder = platform.getGeocodingService();
@@ -61,12 +62,32 @@
                             const { Latitude : lat, Longitude: lng } = location;
                             const marker = new H.map.Marker({ lat, lng });
                             const LocOfMarker = { lat, lng };
+                            marker.draggable = true;
                             map.addObject(marker);
                             map.setCenter(LocOfMarker);
+                            map.setZoom(16);
+                            map.addEventListener('dragstart', evt => {
+                                if (evt.target instanceof H.map.Marker) behavior.disable();
+                            }, false);
+                            map.addEventListener('dragend', evt => {
+                                if (evt.target instanceof H.map.Marker) {
+                                    behavior.enable();    
+                                }
+                            }, false);
+                            map.addEventListener('drag', evt => {
+                                const pointer = evt.currentPointer;
+                                if (evt.target instanceof H.map.Marker) {
+                                    evt.target.setGeometry(map.screenToGeo(pointer.viewportX, pointer.viewportY));
+                                    map.setCenter(LocOfMarker);
+                                }
+                            }, false);    
                         }); 
                     }    
+                    map.addEventListener('drag', function(evt) {
+                    x=evt.currentPointer.viewportX, y=evt.currentPointer.viewportY;
+                    console.log();
+                    });
                 </script>
-                
                 <!--mechanic list-->
                 <div class="lower-right" placeholder="list"> 
                 <span>SORT BY: </span>
@@ -93,13 +114,6 @@
                 }
                 echo "</td></tr></table>";
                 ?>    
-                <script>
-                    var x,y;
-                    map.addEventListener('tap', function(evt) {
-                    x=evt.currentPointer.viewportX, y=evt.currentPointer.viewportY
-                    });
-                </script>
-                
                 </div>
             </div>     
         </div>
