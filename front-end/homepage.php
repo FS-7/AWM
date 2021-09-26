@@ -11,11 +11,6 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-        <script type="text/javascript" src="dist/jso.js"></script>
-        <script type="text/javascript">
-	        var config = {...}
-	        var j = new jso.JSO(config)
-        </script>
         <script>
         /*const xmlhttp = new XMLHttpRequest();
         URL url = new URL ("https://positioning.hereapi.com/v2/locate&apiKey=RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw&fallback=any&confidence=75");
@@ -48,19 +43,7 @@
             }
             System.out.println(response.toString());
         }*/
-        const xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "https://positioning.hereapi.com/v2/locate&apiKey=RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw&fallback=any&confidence=75", true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send({"lte": 
-            [
-                {"mcc": 262, "mnc": 2, "cid": 2898945,"rsrp": -50, "rsrq": -5,
-                    "nmr": [
-                        { "earfcn": 6300, "pci": 237, "rsrp": -60, "rsrq": -6 },
-                        { "earfcn": 6300, "pci": 442, "rsrp": -70, "rsrq": -7 }
-                    ]
-                }
-            ]
-        });
+        
         </script>
     </head>
     <body>
