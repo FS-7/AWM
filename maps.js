@@ -5,7 +5,7 @@ const defaultLayers = platform.createDefaultLayers();
 
 const map = new H.Map(document.getElementById('map'),
 defaultLayers.vector.normal.map, {
-    center: { lat: 0 , lng: 0 },
+    center: { lat: 52.5 , lng: 13.3 },
     zoom: 10,
     pixelRatio: window.devicePixelRatio || 1
 });
@@ -14,6 +14,7 @@ defaultLayers.vector.normal.map, {
 const mapEvents = new H.mapevents.MapEvents(map);
 const Behave = new H.mapevents.Behavior(mapEvents);
 const UserI = H.ui.UI;
+
 //resizing and ui buttons 
 window.addEventListener('resize', () => map.getViewPort().resize());
 const behavior = Behave;
@@ -38,44 +39,18 @@ function Marker() {
 
 function func() {
     map.addEventListener('tap', function(evt) {
-        console.log(evt.currentPointer.Latitude, evt.currentPointer.Longitude);
+
+        console.log(lat, lng);
     });
 }
 
-
-
-                    /*
-                    //geocoding
-                    function Marker() {
-                        var x,y;
-                        var add = document.getElementById('search').value;
-                        const searchText = add;
-                        const geocoder = platform.getGeocodingService();
-                        geocoder.geocode({ searchText }, result => {
-                            const location = result.Response.View[0].Result[0].Location.DisplayPosition;
-                            const { Latitude : lat, Longitude: lng } = location;
-                            const marker = new H.map.Marker({ lat, lng });
-                            map.addObject(marker);
-                            map.addEventListener('dragstart', evt => {
-                                if (evt.target instanceof H.map.Marker) behavior.disable();
-                            }, false);
-                            map.addEventListener('dragend', evt => {
-                                if (evt.target instanceof H.map.Marker) {
-                                    behavior.enable();    
-                                }
-                            }, false);
-                            map.addEventListener('drag', evt => {
-                                const pointer = evt.currentPointer;
-                                if (evt.target instanceof H.map.Marker) {
-                                    evt.target.setGeometry(map.screenToGeo(pointer.viewportX, pointer.viewportY));
-                                    map.setCenter(LocOfMarker);
-                                }
-                            }, false);    
-                        }); 
-                    }    
-                    map.addEventListener('drag', function(evt) {
-                    x=evt.currentPointer.viewportX, y=evt.currentPointer.viewportY;
-                    console.log();
-                    });*/
-
-                    
+function updatePosition (event) {
+    var HEREHQcoordinates = {
+      lat: event.coords.latitude,
+      lng: event.coords.longitude
+    };
+    var marker = new H.map.Marker(HEREHQcoordinates);
+    map.addObject(marker);
+    map.setCenter(HEREHQcoordinates);
+  }
+navigator.geolocation.watchPosition(updatePosition);

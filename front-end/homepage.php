@@ -11,40 +11,6 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-        <script>
-        /*const xmlhttp = new XMLHttpRequest();
-        URL url = new URL ("https://positioning.hereapi.com/v2/locate&apiKey=RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw&fallback=any&confidence=75");
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String jsonInputString = {"lte": 
-            [
-                {"mcc": 262, "mnc": 2, "cid": 2898945,"rsrp": -50, "rsrq": -5,
-                    "nmr": [
-                        { "earfcn": 6300, "pci": 237, "rsrp": -60, "rsrq": -6 },
-                        { "earfcn": 6300, "pci": 442, "rsrp": -70, "rsrq": -7 }
-                    ]
-                }
-            ]
-        };
-        
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes("utf-8");
-            os.write(input, 0, input.length);			
-        }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-        }*/
-        
-        </script>
     </head>
     <body>
         <center>
@@ -56,7 +22,7 @@
                 <!--buttons-->
             </div>
         </div>
-        <form action="../back-end/homepage.php" method="GET"></form>
+        <form action="../back-end/homepage.php" method="POST"></form>
         <!--body-->
         <div class="body">
             <div class="upper">
@@ -80,7 +46,8 @@
                     <select>
                         <option value="Name">Name</option>
                         <option value="Distance">Distance</option> 
-                    </select><br><br>
+                    </select>
+                    <input type="button" value="update"><br><br>
                 <?php
                 $conn = mysqli_connect("localhost", "root", "", "awm");
                 $q = mysqli_query($conn, "SELECT name, phone_no, rating FROM mechanic, feedback, service_log where feedback.request_id = service_log.request_id and mechanic.id_no = service_log.m_id order by mechanic.name;");
