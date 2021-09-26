@@ -11,6 +11,57 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+        <script type="text/javascript" src="dist/jso.js"></script>
+        <script type="text/javascript">
+	        var config = {...}
+	        var j = new jso.JSO(config)
+        </script>
+        <script>
+        /*const xmlhttp = new XMLHttpRequest();
+        URL url = new URL ("https://positioning.hereapi.com/v2/locate&apiKey=RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw&fallback=any&confidence=75");
+        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonInputString = {"lte": 
+            [
+                {"mcc": 262, "mnc": 2, "cid": 2898945,"rsrp": -50, "rsrq": -5,
+                    "nmr": [
+                        { "earfcn": 6300, "pci": 237, "rsrp": -60, "rsrq": -6 },
+                        { "earfcn": 6300, "pci": 442, "rsrp": -70, "rsrq": -7 }
+                    ]
+                }
+            ]
+        };
+        
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);			
+        }
+
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }*/
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "https://positioning.hereapi.com/v2/locate&apiKey=RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw&fallback=any&confidence=75", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send({"lte": 
+            [
+                {"mcc": 262, "mnc": 2, "cid": 2898945,"rsrp": -50, "rsrq": -5,
+                    "nmr": [
+                        { "earfcn": 6300, "pci": 237, "rsrp": -60, "rsrq": -6 },
+                        { "earfcn": 6300, "pci": 442, "rsrp": -70, "rsrq": -7 }
+                    ]
+                }
+            ]
+        });
+        </script>
     </head>
     <body>
         <center>
@@ -28,7 +79,7 @@
             <div class="upper">
                 <div class="upper-left"> 
                     <!--search bar-->
-                    <input type="text" name="search" placeholder="Search.." id="search" />
+                    <input type="text" name="search" placeholder="Search.." id="search"/>
                     <button type="submit" onclick=Marker();><i class="fa fa-search"></i></button>
                 </div>
 
@@ -37,60 +88,12 @@
             </div>
             <div class="lower">
                 <!--MAPS-->
-                <div class="lower-left" id="map"></div>
-                <script>
-                    const platform = new H.service.Platform({ apikey: 'RcKQATNQXIpKkx6J71y8MmQGByCNnoTqDKcyicGgVgw' });
-                    const defaultLayers = platform.createDefaultLayers();
-                    const map = new H.Map(document.getElementById('map'),
-                    defaultLayers.vector.normal.map, {
-                        center: { lat: 15.333, lng: 75 },
-                        zoom: 10,
-                        pixelRatio: window.devicePixelRatio || 1
-                    });
-                    window.addEventListener('resize', () => map.getViewPort().resize());
-                    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-                    const ui = H.ui.UI.createDefault(map, defaultLayers);
+                <div class="lower-left" id="map" onmouseover=func();></div>
+                <script src="../maps.js"></script>
 
-                    //geocoding
-                    function Marker() {
-                        var x,y;
-                        var add = document.getElementById('search').value;
-                        const searchText = add;
-                        const geocoder = platform.getGeocodingService();
-                        geocoder.geocode({ searchText }, result => {
-                            const location = result.Response.View[0].Result[0].Location.DisplayPosition;
-                            const { Latitude : lat, Longitude: lng } = location;
-                            const marker = new H.map.Marker({ lat, lng });
-                            const LocOfMarker = { lat, lng };
-                            marker.draggable = true;
-                            map.addObject(marker);
-                            map.setCenter(LocOfMarker);
-                            map.setZoom(16);
-                            map.addEventListener('dragstart', evt => {
-                                if (evt.target instanceof H.map.Marker) behavior.disable();
-                            }, false);
-                            map.addEventListener('dragend', evt => {
-                                if (evt.target instanceof H.map.Marker) {
-                                    behavior.enable();    
-                                }
-                            }, false);
-                            map.addEventListener('drag', evt => {
-                                const pointer = evt.currentPointer;
-                                if (evt.target instanceof H.map.Marker) {
-                                    evt.target.setGeometry(map.screenToGeo(pointer.viewportX, pointer.viewportY));
-                                    map.setCenter(LocOfMarker);
-                                }
-                            }, false);    
-                        }); 
-                    }    
-                    map.addEventListener('drag', function(evt) {
-                    x=evt.currentPointer.viewportX, y=evt.currentPointer.viewportY;
-                    console.log();
-                    });
-                </script>
                 <!--mechanic list-->
                 <div class="lower-right" placeholder="list"> 
-                <span>SORT BY: </span>
+                <span id="list">SORT BY: </span>
                     <select>
                         <option value="Name">Name</option>
                         <option value="Distance">Distance</option> 

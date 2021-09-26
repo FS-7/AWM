@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2021 at 06:58 PM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 8.0.1
+-- Generation Time: Sep 26, 2021 at 03:12 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,16 +32,9 @@ CREATE TABLE `customer` (
   `name` varchar(20) NOT NULL,
   `phone_no` bigint(10) NOT NULL,
   `email_id` varchar(50) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `vehicle` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`id_no`, `name`, `phone_no`, `email_id`, `password`, `vehicle`) VALUES
-(101, 'Adil ', 9999999999, 'adil@gmail.com', 'hfjk123', 'KA15X7193');
 
 -- --------------------------------------------------------
 
@@ -52,16 +45,9 @@ INSERT INTO `customer` (`id_no`, `name`, `phone_no`, `email_id`, `password`, `ve
 CREATE TABLE `feedback` (
   `request_id` bigint(15) NOT NULL,
   `rating` int(1) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
   `date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `feedback`
---
-
-INSERT INTO `feedback` (`request_id`, `rating`, `description`, `date`) VALUES
-(1000, 5, 'excellent', '2021-09-11 11:21:33.000000');
 
 -- --------------------------------------------------------
 
@@ -75,7 +61,7 @@ CREATE TABLE `mechanic` (
   `name` varchar(20) NOT NULL,
   `phone_no` bigint(10) NOT NULL,
   `email_id` varchar(50) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `model_no` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -84,7 +70,8 @@ CREATE TABLE `mechanic` (
 --
 
 INSERT INTO `mechanic` (`id_no`, `adhaar_no`, `name`, `phone_no`, `email_id`, `password`, `model_no`) VALUES
-(1, 123486869755, 'mansoor', 9999999999, 'mansoor@gmail.com', 'sdfghj112', NULL);
+(1, 123456789012, 'Faizan', 2345673456, 'ffgdse@gmail.com', 'ajlfjsjafl', NULL),
+(11, 123456789013, 'safsfgas', 8765453232, 'hhdfdsfas@gmail.com', 'wertyuiop', NULL);
 
 -- --------------------------------------------------------
 
@@ -97,16 +84,10 @@ CREATE TABLE `service_log` (
   `m_id` bigint(10) NOT NULL,
   `c_email` varchar(50) NOT NULL,
   `c_phno` bigint(10) NOT NULL,
-  `c_location` varchar(100) NOT NULL,
+  `c_loc_lat` float NOT NULL,
+  `c_loc_lon` float NOT NULL,
   `request_id` bigint(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `service_log`
---
-
-INSERT INTO `service_log` (`c_id`, `m_id`, `c_email`, `c_phno`, `c_location`, `request_id`) VALUES
-(101, 1, 'adil@gmail.com', 999999999, 'anand nagar,hubli', 1000);
 
 --
 -- Indexes for dumped tables
@@ -122,6 +103,7 @@ ALTER TABLE `customer`
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
+  ADD UNIQUE KEY `request_id` (`request_id`),
   ADD KEY `req_id` (`request_id`);
 
 --
@@ -152,7 +134,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `mechanic`
 --
 ALTER TABLE `mechanic`
-  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `service_log`
