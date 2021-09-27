@@ -13,11 +13,11 @@
         {
             echo "<h1>error</h1>";
         }
-        else
-        {
+        else{
             $conn = mysqli_connect('localhost','root','','awm'); //only XAMPP
-            $query = "insert into customer values('null','$name','$phone','$email','$pass','$vehicle')";
-            $q = mysqli_query($query,$conn);
+            $passw = hash('sha256', $pass);
+            $query = "INSERT INTO `customer`(`id_no`, `name`, `phone_no`, `email_id`, `password`) VALUES ('null','$name','$phone','$email','$passw')";
+            $q = mysqli_query($conn, $query);
             if(!$q)
             {
                 echo "<h1>error</h1>";

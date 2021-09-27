@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Any Where Mechanic</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+        <link rel="stylesheet" type="text/css" href="homepage.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+        <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+        <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+        <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    </head>
+    <body>
+        <center>
+        <div class="header">
+            <div class="left">
+                <!--logo-->
+            </div>
+            <div class="right">
+                <!--buttons-->
+            </div>
+        </div>
+        <form action="../back-end/homepage.php" method="POST"></form>
+        <!--body-->
+        <div class="body">
+            <div class="upper">
+                <div class="upper-left"> 
+                    <!--search bar-->
+                    <label class='txtlabel'>Find Mechanic:</label>
+                    <input type="text" name="search" placeholder=" Search.." id="search"/>
+                    <button type="button" onclick=navigator.geolocation.watchPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
+                    <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
+                </div>
+
+                <div class="upper-right">
+                    
+                </div>
+            </div>
+            <div class="lower">
+                <!--MAPS-->
+                <div class="lower-left" id="map" onmouseup=setUpClickListener(map);></div>
+                <script src="maps.js"></script>
+
+                <!--mechanic list-->
+                <div class="lower-right" placeholder="list"> 
+                <p id="list">SORT BY: </p>
+                    <select style="float: left;">
+                        <option value="Name">Name</option>
+                        <option value="Distance">Distance</option> 
+                    </select>
+                    <input type="button" value="update" onclick=route();><br><br>
+                    
+                <table class='mec_list' border=2px>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src='../img/awm.jpg' height='75px' width='75px'>
+                                    </td>
+                                    <td>
+                                        <table class='mec_list2'>
+                                            <tr>
+                                                <td>
+                                                    <p id='mech_name'></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p id='mech_ph'></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span id='dist'></span>
+                                                    <script src='calculate.js'></script>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <input type='button' name='submit' value='Book'/><br>
+                                        <p id='rating'></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <script>
+                    const xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onload = function() {
+                        const myObj = JSON.parse(this.responseText);
+                        document.getElementById("mech_name").innerHTML = 'Name: '+myObj.name;
+                        document.getElementById("mech_ph").innerHTML = 'Phone: +91'+myObj.phone;
+                        document.getElementById("rating").innerHTML = myObj.rating;
+                    }
+                    xmlhttp.open("POST", "../s.php");
+                    xmlhttp.send();
+                </script>
+                </div>
+            </div>     
+        </div>
+        </form>
+        </center>
+    </body>
+</html>

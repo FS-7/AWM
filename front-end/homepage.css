@@ -1,39 +1,99 @@
-.body
-{
+@media only screen and (max-width: 600px) {
+    .header {width: 300px;}
+    .left {width: 60%;}
+    .right {width: 60%;}
+    .body {width: 300px;}
+    .upper {width: 60%;}
+    .lower {width: 60%;}
+    .upper-left {width: 60%;}
+    .upper-right {width: 60%;}
+    .lower-left {width: 60%;}
+    .lower-right {width: 60%;}
+}
+
+.header{
+    height: 100px;
+    width: 1000px;
+}
+
+.left{
+    height: 100%;
+    width: 50%;
+    display: block;
+    float: left;
+}
+
+.right{
+    height: 100%;
+    width: 50%;
+    display: block;
+    float: right;
+}
+
+.body{
     height: 600px;
     width: 1000px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    display: block;
 }
 
 .upper{
-    width: 1000px;
-    height: 196px;
+    height: 33%;
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 .lower{
-    width: 1000px;
-    height: 400px;
+    height: 66%;
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
+
 .upper-left {
-    margin-top: 75px;
-    width: 600px;
+    height: 37%;
+    width: 60%;
+    padding: 0px 0px 0px 0px;
+    margin: 5% 0px 0px 0px;
     float: left;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     background-color: #ccc;
+    border-radius: 2px;
+}
+
+.txtlabel{
+    height: 42%;
+    width: 95%;
+    padding: 0px 0px 0px 0px;
+    margin: 0.25% 0px 0px 0px;
+    display: block;
+    text-align: left;
+    font-size: 25px;
+    font-weight: bolder;
 }
 
 .upper-left input[type=text] {
-    width: 550px;
-    background-color: #ddd;
-    padding: 6px;
-    font-size: 17px;
+    height: 50%;
+    width: 82%;
+    padding: 0px 0px 0px 0px;
+    margin: 0.25% 0px 0px 1%;
+    display: block;
+    float: left;    
+    font-size: 20px;
     border: none;
+    background-color: #ddd;
 }
 
 .upper-left button {
+    height: 50%;
+    width: 6.5%;
+    padding: 0px 0px 0px 0px;
+    margin: 0.25% 1% 0px 0.1%;
     float: right;
-    padding: 6px 10px;
     background: #ddd;
-    font-size: 17px;
+    font-size: 20px;
     border: none;
     cursor: pointer;
 }
@@ -43,40 +103,47 @@
 }
 
 .upper-right{
-    float: right;
-    display: block;
-    width: 380px;
     height: 100%;
+    width: 39%;
+    display: block;
+    float: right;
 }
 
-.lower-left
-{ 
+.lower-left{
+    height: 100%;
+    width: 60%; 
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
     float: left;
     border: 1px solid black; 
-    margin: 0px 0px 0px 0px; 
-    padding: 0; 
 }
 
 .lower-right{
-    float: right;
-    display: block;
-    width: 380px;
     height: 100%;
+    width: 39%; 
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    display: block;
+    float: right;
 }
 
 .mec_list, .mec_list2{
-    margin: 0px 0px 0px 0px; 
-    padding: 0;
     width: 230px;
-    text-align: center;
-}
-
-#map
-{
-    height: 400px; 
-    width: 600px; 
+    margin: 0px 0px 0px 0px; 
+    padding: 0px 0px 0px 0px;
+    text-align: left;
 }
 
 #list{
+    width: 20%;
+    margin: 0px 0px 0px 10%;
+    float:left;
     text-align: left;
+}
+
+#mech_name, #mech_ph, #dist, #rating{
+    margin: 0px 0px 0px 0px;
+    height: 6%;
+    width: 100%; 
+    display: block;
 }
