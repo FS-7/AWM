@@ -11,40 +11,50 @@ const map = new H.Map(document.getElementById('map'),
 window.addEventListener('resize', () => map.getViewPort().resize());
 const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 const ui = H.ui.UI.createDefault(map, defaultLayers);
+var lat=0, lng=0;
+var marker = new H.map.Marker({ lat, lng });
 
-//get location by clicking on the map
-function setUpClickListener(map) {
-    var x,y;
-    map.addEventListener('tap', function (evt) {
-        var coord = map.screenToGeo(evt.target.getGeometry());
-        console.log(coord);
-        //RGC(x, y);
-        return;
+//Search your Location
+function SYL() {
+    const searchText = document.getElementById('search').value;
+    const geocoder = platform.getGeocodingService();
+    geocoder.geocode({ searchText }, result => {
+        const location = result.Response.View[0].Result[0].Location.DisplayPosition;
+        const { Latitude : lat, Longitude: lng } = location;
+        marker.setGeometry({lat, lng});
+        map.addObject(marker);
+        map.setCenter({lat, lng});
+        map.setZoom(14);
     });
 }
 
-function addMarkerToGroup(group, coordinate, html) {
-    var marker = new H.map.Marker(coordinate);
-    console.log(html);
-    marker.setData(html);
-    group.addObject(marker);
+//get location by clicking on the map
+function setUpClickListener(map) {
+    var lat, lng;
+    map.addEventListener('tap', function (evt) {
+        var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
+        lat = Math.abs(coord.lat.toFixed(4)); 
+        lng = Math.abs(coord.lng.toFixed(4));
+        RGC(lat, lng);
+        marker.setGeometry({ lat, lng });
+    });
 }
 
 var service = platform.getSearchService();
-var group = new H.map.Group();
+var bubble, bubblex;
 function RGC(x, y) {
-    map.addObject(group);
-    addMarkerToGroup(group, {x, y},
-        service.reverseGeocode({ at: ''+x+','+y+''}, 
-        (result) => {
-            result.items.forEach((item) => {
-                    var bubble = new H.ui.InfoBubble(item.position, {
-                    content: item.address.label+', lat:'+x+', lng:'+y 
-                });
-                ui.addBubble(bubble);
+    service.reverseGeocode({
+        at: ''+x+','+y+''
+    }, (result) => {
+        result.items.forEach((item) => {
+                bubble = new H.ui.InfoBubble(item.position, {
+                content: item.address.label+', lat:'+x+', lng:'+y 
             });
-        }, alert)
-    );
+            ui.removeBubble(bubblex);
+            ui.addBubble(bubble);
+            bubblex = bubble;
+        });
+    }, alert);
 }
 setUpClickListener(map);
 
@@ -54,25 +64,12 @@ function updatePosition (event) {
         lat: event.coords.latitude,
         lng: event.coords.longitude,
     };
-    var marker = new H.map.Marker(HEREHQcoordinates);
+    marker.setGeometry(HEREHQcoordinates);
     marker.draggable = true;
     map.addObject(marker);
     map.setCenter(HEREHQcoordinates);
-    map.setZoom(16);
-}
-
-//Search your Location
-function SYL() {
-    const searchText = document.getElementById('search').value;
-    const geocoder = platform.getGeocodingService();
-    geocoder.geocode({ searchText }, result => {
-        const location = result.Response.View[0].Result[0].Location.DisplayPosition;
-        const { Latitude : lat, Longitude: lng } = location;
-        const marker = new H.map.Marker({ lat, lng });
-        map.addObject(marker);
-        map.setCenter({lat, lng});
-        map.setZoom(16);
-    });
+    map.setZoom(14);
+    addDraggableMarker(map, behavior);
 }
 
 //draggable marker

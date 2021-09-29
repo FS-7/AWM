@@ -30,7 +30,7 @@
                     <!--search bar-->
                     <label class='txtlabel'>Find Mechanic:</label>
                     <input type="text" name="search" placeholder=" Search.." id="search"/>
-                    <button type="button" onclick=navigator.geolocation.watchPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
+                    <button type="button" onclick=navigator.geolocation.getCurrentPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
                     <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
                 </div>
 
@@ -50,7 +50,7 @@
                         <option value="Name">Name</option>
                         <option value="Distance">Distance</option> 
                     </select>
-                    <input type="button" value="update" ><!--onclick=route();--><br><br>
+                    <input type="button" value="Locate" onclick=Find();><br><br>
                     
                 <table class='mec_list' border=2px>
                     <tr>
@@ -90,12 +90,19 @@
                     </tr>
                 </table>
                 <script>
+                    var mechname = new Array(), mechph = new Array(), i=0;
                     const xmlhttp = new XMLHttpRequest();
                     xmlhttp.onload = function() {
-                        const myObj = JSON.parse(this.responseText);
-                        document.getElementById("mech_name").innerHTML = 'Name: '+myObj.name;
-                        document.getElementById("mech_ph").innerHTML = 'Phone: +91'+myObj.phone;
-                        document.getElementById("rating").innerHTML = myObj.rating;
+                        var myObj = JSON.parse(this.responseText);
+                        console.log(this.responseText);
+                        myObj.forEach(element => {
+                            mechname[i]=element[1];
+                            mechph[i]=element[2];
+                            document.getElementById("mech_name").innerHTML = 'Name: '+mechname[i];
+                            document.getElementById("mech_ph").innerHTML = 'Phone: +91'+mechph[i];
+                            document.getElementById("rating").innerHTML = myObj.rating;
+                            i++;
+                        });   
                     }
                     xmlhttp.open("POST", "../s.php");
                     xmlhttp.send();

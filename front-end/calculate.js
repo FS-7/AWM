@@ -1,3 +1,40 @@
+//Mech dist calculator
+var x= new Array(), y= new Array(), dist = new Array();
+var x1=15,y1=75, i=0;
+const xmlhttp1 = new XMLHttpRequest();
+xmlhttp1.onload = function() {
+    const myObj = JSON.parse(this.responseText);    
+    myObj.forEach(element => {
+        x[i]=element[3];
+        y[i]=element[4];
+        dist[i] = parseInt(distance(x[i], y[i], x1, y1));
+        document.getElementById("dist").innerHTML = 'Distance: '+dist;
+        i++;
+    });
+    //mark(x, y);
+}
+xmlhttp1.open("POST", "../s.php");
+xmlhttp1.send();
+
+function mark(x, y) {
+    var coords = [{lat: x, lng: y}];
+    coords.forEach(function (value, index) {
+        marker = new H.map.Marker(value,  {
+          volatility: true
+        });
+        marker.setData(index + 1);
+        map.addObject(marker);
+        map.setCenter({lat: x, lng: y});
+    });
+}
+
+function distance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = Math.cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * Math.asin(Math.sqrt(a));
+}
+
 //mechanic markers
 function addMarkerToGroup(group, coordinate, html) {
     var marker = new H.map.Marker(coordinate);
@@ -6,18 +43,20 @@ function addMarkerToGroup(group, coordinate, html) {
 }
 
 function addInfoBubble(map) {
-    var name = '';
     var group = new H.map.Group();
     map.addObject(group);
+    ui.removeBubble(bubblex);
     group.addEventListener('tap', function (evt) {
-            var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+            var ibubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
             content: evt.target.getData()
         });
-        ui.addBubble(bubble);
+        ui.addBubble(ibubble);
+        document.getElementById('info').innerHTML = mechname;
+        setTimeout('ui.removeBubble(bubble);', 1000);
     }, false);
-    addMarkerToGroup(group, {lat: 15.34649, lng: 75.14553},
+    addMarkerToGroup(group, {lat: 15, lng: 75},
         "<div><img src='../img/awm.jpg' height='50px' width='50px'></div>" +
-        "<div>Mechanic Name, Phone</div>"
+        "<div id='info'>Hi</div>"
     );
 }
 //addInfoBubble(map);
@@ -71,35 +110,3 @@ function route() {
     });
 }
 
-//Mech dist calculator
-
-var x1=15,y1=75;
-const xmlhttp1 = new XMLHttpRequest();
-xmlhttp1.onload = function() {
-    const myObj = JSON.parse(this.responseText);
-    x = myObj.loc_lat, y = myObj.loc_lng;
-    //mark(x, y);
-    var dist = parseInt(distance(x, y, x1, y1));
-    document.getElementById("dist").innerHTML = 'Distance: '+dist;
-}
-xmlhttp1.open("GET", "../s.php");
-xmlhttp1.send();
-
-function mark(x, y) {
-    var coords = [{lat: x, lng: y}];
-    coords.forEach(function (value, index) {
-        marker = new H.map.Marker(value,  {
-          volatility: true
-        });
-        marker.setData(index + 1);
-        map.addObject(marker);
-        map.setCenter({lat: x, lng: y});
-    });
-}
-
-function distance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = Math.cos;
-    var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
-    return 12742 * Math.asin(Math.sqrt(a));
-}

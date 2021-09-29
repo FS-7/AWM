@@ -1,0 +1,21 @@
+<body>
+    <div id='test'>
+        
+    </div>
+</body>
+
+<script>
+const xmlhttp1 = new XMLHttpRequest();
+var arrayOfMech= new Array();
+xmlhttp1.onload = function() {
+    
+    var myObj = JSON.parse(this.responseText);
+    myObj.forEach(element => {
+        arrayOfMech[element[1]] = element[1];
+    });    
+    console.log(arrayOfMech);
+    //document.getElementById("test").innerHTML = myObj;
+}
+xmlhttp1.open("POST", "s.php");
+xmlhttp1.send();
+</script>
