@@ -16,28 +16,37 @@ const ui = H.ui.UI.createDefault(map, defaultLayers);
 function setUpClickListener(map) {
     var x,y;
     map.addEventListener('tap', function (evt) {
-        var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
-        x = Math.abs(coord.lat.toFixed(4)); 
-        y = Math.abs(coord.lng.toFixed(4));
-        RGC(x, y);
+        var coord = map.screenToGeo(evt.target.getGeometry());
+        console.log(coord);
+        //RGC(x, y);
         return;
-        //findNearestMarker(coords);
     });
 }
 
-var service = platform.getSearchService();
-function RGC(x, y) {
-    service.reverseGeocode({
-        at: ''+x+','+y+''
-    }, (result) => {
-        result.items.forEach((item) => {
-            ui.addBubble(new H.ui.InfoBubble(item.position, {
-                content: item.address.label
-            }));
-        });
-    }, alert);
-    console.log('info');
+function addMarkerToGroup(group, coordinate, html) {
+    var marker = new H.map.Marker(coordinate);
+    console.log(html);
+    marker.setData(html);
+    group.addObject(marker);
 }
+
+var service = platform.getSearchService();
+var group = new H.map.Group();
+function RGC(x, y) {
+    map.addObject(group);
+    addMarkerToGroup(group, {x, y},
+        service.reverseGeocode({ at: ''+x+','+y+''}, 
+        (result) => {
+            result.items.forEach((item) => {
+                    var bubble = new H.ui.InfoBubble(item.position, {
+                    content: item.address.label+', lat:'+x+', lng:'+y 
+                });
+                ui.addBubble(bubble);
+            });
+        }, alert)
+    );
+}
+setUpClickListener(map);
 
 //automatic location using GPS
 function updatePosition (event) {
@@ -50,7 +59,6 @@ function updatePosition (event) {
     map.addObject(marker);
     map.setCenter(HEREHQcoordinates);
     map.setZoom(16);
-    return false;
 }
 
 //Search your Location

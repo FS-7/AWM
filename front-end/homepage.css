@@ -1,14 +1,15 @@
 @media only screen and (max-width: 600px) {
-    .header {width: 300px;}
-    .left {width: 60%;}
-    .right {width: 60%;}
-    .body {width: 300px;}
-    .upper {width: 60%;}
-    .lower {width: 60%;}
-    .upper-left {width: 60%;}
-    .upper-right {width: 60%;}
-    .lower-left {width: 60%;}
-    .lower-right {width: 60%;}
+    body {width: 600px;}
+    .header {width: 600px;}
+    .left {width: 100%;}
+    .right {width: 100%;}
+    .body {width: 600px;}
+    .upper {width: 100%;}
+    .lower {width: 100%;}
+    .upper-left {width: 100%;}
+    .upper-right {width: 100%;}
+    .lower-left {width: 100%;}
+    .lower-right {width: 100%;}
 }
 
 .header{

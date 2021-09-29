@@ -10,7 +10,7 @@ function addInfoBubble(map) {
     var group = new H.map.Group();
     map.addObject(group);
     group.addEventListener('tap', function (evt) {
-        var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+            var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
             content: evt.target.getData()
         });
         ui.addBubble(bubble);
@@ -71,19 +71,22 @@ function route() {
     });
 }
 
+//Mech dist calculator
+
+var x1=15,y1=75;
 const xmlhttp1 = new XMLHttpRequest();
 xmlhttp1.onload = function() {
     const myObj = JSON.parse(this.responseText);
     x = myObj.loc_lat, y = myObj.loc_lng;
-    mark(x, y);
-    document.getElementById("dist").innerHTML = 'Distance: '+myObj.dist;
+    //mark(x, y);
+    var dist = parseInt(distance(x, y, x1, y1));
+    document.getElementById("dist").innerHTML = 'Distance: '+dist;
 }
 xmlhttp1.open("GET", "../s.php");
 xmlhttp1.send();
 
 function mark(x, y) {
     var coords = [{lat: x, lng: y}];
-    console.log(x, y);
     coords.forEach(function (value, index) {
         marker = new H.map.Marker(value,  {
           volatility: true
@@ -94,18 +97,9 @@ function mark(x, y) {
     });
 }
 
-var dist = function findNearestMarker(coords) {
-    var minDist = 1000,
-    nearest_text = '*None*',
-    markerDist,
-    objects = map.getObjects(),
-    len = map.getObjects().length,
-    i;
-    for (i = 0; i < len; i += 1) {
-        markerDist = objects[i].getGeometry().distance(coords);
-        if (markerDist < minDist) {
-            minDist = markerDist;
-            nearest_text = objects[i].getData();
-        }
-    }
+function distance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = Math.cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * Math.asin(Math.sqrt(a));
 }
