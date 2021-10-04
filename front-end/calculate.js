@@ -1,65 +1,40 @@
-//Mech dist calculator
-var x= new Array(), y= new Array(), dist = new Array();
-var x1=15,y1=75, i=0;
-const xmlhttp1 = new XMLHttpRequest();
-xmlhttp1.onload = function() {
-    const myObj = JSON.parse(this.responseText);    
+var mechname = new Array(), mechph = new Array(), dist = new Array(), mech_lat = new Array(), mech_lng = new Array(), mech_img = new Array();
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onload = function() {
+    var myObj = JSON.parse(this.responseText);
+    var h=0, loc = new Array();
     myObj.forEach(element => {
-        x[i]=element[3];
-        y[i]=element[4];
-        dist[i] = parseInt(distance(x[i], y[i], x1, y1));
-        document.getElementById("dist").innerHTML = 'Distance: '+dist;
-        i++;
-    });
-    //mark(x, y);
+        mechname[h]=element[1];
+        mechph[h]=element[2];
+        mech_lat[h]=element[3];
+        mech_lng[h]=element[4];
+        mech_img[h]=element[5];
+        loc[h] = {lat: mech_lat[h], lng: mech_lng[h]};
+        addBubble(loc[h], mechname[h], mechph[h], h, mech_img[h]);
+        h++;
+    })
 }
-xmlhttp1.open("POST", "../s.php");
-xmlhttp1.send();
-
-function mark(x, y) {
-    var coords = [{lat: x, lng: y}];
-    coords.forEach(function (value, index) {
-        marker = new H.map.Marker(value,  {
-          volatility: true
-        });
-        marker.setData(index + 1);
-        map.addObject(marker);
-        map.setCenter({lat: x, lng: y});
-    });
-}
-
-function distance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = Math.cos;
-    var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
-    return 12742 * Math.asin(Math.sqrt(a));
-}
+xmlhttp.open("POST", "../s.php");
+xmlhttp.send();
 
 //mechanic markers
-function addMarkerToGroup(group, coordinate, html) {
-    var marker = new H.map.Marker(coordinate);
-    marker.setData(html);
-    group.addObject(marker);
+function addBubble(value, mechname, mechph, h, mechimgx) {
+    if(mechimgx==''){
+        mechimgx='awm.jpg';
+    }
+    var html = '<div><img src="../img/'+mechimgx+'" id="mechimg_'+h+'"/></div>'+'<div><p id="info_'+h+'"></p></div>';
+    var bubble = new Array();
+    bubble[h] = new H.ui.InfoBubble(value,{
+        content: html
+    });
+    ui.addBubble(bubble[h]);
+    var mechimg = document.getElementById('mechimg_'+h);
+    var info = document.getElementById('info_'+h);
+    mechimg.innerHTML = '';
+    info.innerHTML = 'Name: '+mechname+'<br>Phone: '+mechph;
+    mechimg.setAttribute('height', '50px');
+    info.setAttribute('style', 'font-size: 12px;');
 }
-
-function addInfoBubble(map) {
-    var group = new H.map.Group();
-    map.addObject(group);
-    ui.removeBubble(bubblex);
-    group.addEventListener('tap', function (evt) {
-            var ibubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-            content: evt.target.getData()
-        });
-        ui.addBubble(ibubble);
-        document.getElementById('info').innerHTML = mechname;
-        setTimeout('ui.removeBubble(bubble);', 1000);
-    }, false);
-    addMarkerToGroup(group, {lat: 15, lng: 75},
-        "<div><img src='../img/awm.jpg' height='50px' width='50px'></div>" +
-        "<div id='info'>Hi</div>"
-    );
-}
-//addInfoBubble(map);
 
 //routing
 var routingParameters = {

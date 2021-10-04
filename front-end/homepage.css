@@ -128,8 +128,8 @@
     float: right;
 }
 
-.mec_list, .mec_list2{
-    width: 230px;
+.mec_list{
+    width: 80%;
     margin: 0px 0px 0px 0px; 
     padding: 0px 0px 0px 0px;
     text-align: left;
@@ -142,7 +142,7 @@
     text-align: left;
 }
 
-#mech_name, #mech_ph, #dist, #rating{
+#mech_0, #mech_1, #dist, #rating{
     margin: 0px 0px 0px 0px;
     height: 6%;
     width: 100%; 

@@ -41,7 +41,7 @@
             <div class="lower">
                 <!--MAPS-->
                 <div class="lower-left" id="map"></div>
-                <script src="maps.js"></script>
+                
 
                 <!--mechanic list-->
                 <div class="lower-right" placeholder="list"> 
@@ -51,62 +51,9 @@
                         <option value="Distance">Distance</option> 
                     </select>
                     <input type="button" value="Locate" onclick=Find();><br><br>
-                    
-                <table class='mec_list' border=2px>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <img src='../img/awm.jpg' height='75px' width='75px'>
-                                    </td>
-                                    <td>
-                                        <table class='mec_list2'>
-                                            <tr>
-                                                <td>
-                                                    <p id='mech_name'></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <p id='mech_ph'></p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span id='dist'></span>
-                                                    <script src='calculate.js'></script>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <input type='button' name='submit' value='Book'/><br>
-                                        <p id='rating'></p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-                <script>
-                    var mechname = new Array(), mechph = new Array(), i=0;
-                    const xmlhttp = new XMLHttpRequest();
-                    xmlhttp.onload = function() {
-                        var myObj = JSON.parse(this.responseText);
-                        console.log(this.responseText);
-                        myObj.forEach(element => {
-                            mechname[i]=element[1];
-                            mechph[i]=element[2];
-                            document.getElementById("mech_name").innerHTML = 'Name: '+mechname[i];
-                            document.getElementById("mech_ph").innerHTML = 'Phone: +91'+mechph[i];
-                            document.getElementById("rating").innerHTML = myObj.rating;
-                            i++;
-                        });   
-                    }
-                    xmlhttp.open("POST", "../s.php");
-                    xmlhttp.send();
-                </script>
+                    <script src="calculate.js"></script>
+                <table class='mec_list' id='mech_list' border=2px></table>
+                <script src='maps.js'></script>
                 </div>
             </div>     
         </div>
