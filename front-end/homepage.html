@@ -34,25 +34,22 @@
                     <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
                 </div>
 
-                <div class="upper-right">
-                    
-                </div>
+                <div class="upper-right" id='notification'></div>
             </div>
             <div class="lower">
                 <!--MAPS-->
                 <div class="lower-left" id="map"></div>
                 
-
                 <!--mechanic list-->
-                <div class="lower-right" placeholder="list"> 
-                <p id="list">SORT BY: </p>
+                <div class="lower-right" placeholder="list"><br>
+                <p id="list"><strong>SORT BY: </strong> </p>
                     <select style="float: left;">
                         <option value="Name">Name</option>
                         <option value="Distance">Distance</option> 
                     </select>
-                    <input type="button" value="Locate" onclick=Find();><br><br>
-                    <script src="calculate.js"></script>
-                <table class='mec_list' id='mech_list' border=2px></table>
+                    <input type="button" value="Locate" onclick=findNearestMech();><br><br>
+                    
+                <table class='mec_list' id='mech_list'></table>
                 <script src='maps.js'></script>
                 </div>
             </div>     

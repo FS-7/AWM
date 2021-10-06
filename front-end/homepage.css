@@ -11,6 +11,10 @@
     .lower-left {width: 100%;}
     .lower-right {width: 100%;}
 }
+body{
+    background-image: url('../img/back2.jpg');
+    background-size: cover;
+}
 
 .header{
     height: 100px;
@@ -34,9 +38,11 @@
 .body{
     height: 600px;
     width: 1000px;
-    padding: 0px 0px 0px 0px;
+    padding: 1%;
     margin: 0px 0px 0px 0px;
     display: block;
+    border-radius: 2%;
+    background-color:  rgba(157, 57, 65, 0.747);
 }
 
 .upper{
@@ -60,7 +66,7 @@
     margin: 5% 0px 0px 0px;
     float: left;
     border: 1px solid #000000;
-    background-color: #ccc;
+    background: linear-gradient(to right, #990000 0%, #d68c1de8 100%);
     border-radius: 2px;
 }
 
@@ -124,6 +130,7 @@
     width: 39%; 
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
+    border-radius: 2%;
     display: block;
     float: right;
 }
@@ -132,6 +139,7 @@
     width: 80%;
     margin: 0px 0px 0px 0px; 
     padding: 0px 0px 0px 0px;
+    border: 1px solid black;
     text-align: left;
 }
 

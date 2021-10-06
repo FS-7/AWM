@@ -14,6 +14,41 @@ const ui = H.ui.UI.createDefault(map, defaultLayers);
 var lat=0, lng=0;
 var marker = new H.map.Marker({ lat, lng });
 
+var Arr = new Array();
+var h=0;
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onload = function() {
+    var myObj = JSON.parse(this.responseText);
+    myObj.forEach(element => {
+        Arr[h] = element;
+        addBubble(Arr[h]);
+        h++;
+    });
+    mechlist();
+}
+xmlhttp.open("POST", "../back-end/s.php");
+xmlhttp.send();
+
+//mechanic markers
+function addBubble(element) {
+    var value = {lat: element[3], lng: element[4]};
+    if(element[5]==''){
+        element[5]='awm.jpg';
+    }
+    var html = '<div><img id="mechimg_'+h+'"></div>'+'<div><p id="info_'+h+'"></p></div>';
+    var bubble = new Array();
+    bubble[h] = new H.ui.InfoBubble(value,{
+        content: html
+    });
+    ui.addBubble(bubble[h]);
+    var info = document.getElementById('info_'+h);
+    var mechimg = document.getElementById('mechimg_'+h);
+    info.innerHTML = 'Name: '+element[1]+'<br>Phone: '+element[2];
+    mechimg.setAttribute('src', '../img/'+element[5]);
+    mechimg.setAttribute('style', 'height: 50px;');
+    info.setAttribute('style', 'font-size: 12px;');  
+}
+
 //Search your Location
 function SYL() {
     const searchText = document.getElementById('search').value;
@@ -82,7 +117,7 @@ function addDraggableMarker(map, behavior){
             behavior.disable();
         }
     }, false);
-
++
     map.addEventListener('dragend', function(ev) {
         var target = ev.target;
         if (target instanceof H.map.Marker) {
@@ -100,6 +135,20 @@ function addDraggableMarker(map, behavior){
 }
 
 //lower-right.js
+
+
+//
+var coords = [{ lat:15, lng:75}];
+function findNearestMech() {
+    var max_dist = 1000;
+    var locate = marker.getGeometry();
+    var bubbles = ui.getBubbles();
+    console.log(bubbles[0].getBubbles());
+    //console.log(bubbles[0].getGeometry().distance(coords));
+   
+}
+
+//
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = Math.cos;
@@ -109,87 +158,78 @@ function distance(lat1, lon1, lat2, lon2) {
 }
 
 function dynamicSort(property) {
+    var distn = new Array();
     var sortOrder = 1;
     if(property[0] === "-") {
         sortOrder = -1;
         property = property.substr(1);
     }
     return function (a,b) {
-        /* next line works with strings and numbers, 
-         * and you may want to customize it to your needs
-         */
         var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
         return result * sortOrder;
     }
 }
 
-//
-var mechname = new Array(), mechph = new Array(), dist = new Array(), mech_lat = new Array(), mech_lng = new Array();
+//mechanic list 
+var dist = new Array();
 var body = document.getElementById('mech_list');
-var h=0;
-const xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-    var myObj = JSON.parse(this.responseText);
-    myObj.forEach(element => {
-        mechname[h]=element[1];
-        mechph[h]=element[2];
-        mech_lat[h]=element[3];
-        mech_lng[h]=element[4];
+function mechlist(){
+    for(h=0; h<4 && h<Arr.length; h++){
+        element = Arr[h]; 
         tr = document.createElement("tr");
-            td = document.createElement("td");
-                tbl = document.createElement("table");
-                    tblBody = document.createElement("tbody");
-                        row = document.createElement("tr");
-                            //img
-                            cell = document.createElement("td");
-                                cellText = document.createElement("img");
-                                    cellText.setAttribute('id','img');
-                                    cellText.setAttribute('src','../img/awm.jpg');
-                                    cellText.setAttribute('height','60px');
-                                    cellText.setAttribute('width','60px');
-                                cell.appendChild(cellText);
-                            row.appendChild(cell);
-                            //name+phone
-                            cell2 = document.createElement("td");
-                                tbl2 = document.createElement("table");
-                                    tblBody2 = document.createElement("tbody");
-                                        for (let index = 0; index < 3; index++) {
-                                            row2 = document.createElement("tr");
-                                                cell21 = document.createElement("td");
-                                                    cellText2 = document.createElement("p");
-                                                    cellText2.setAttribute('id','mech_'+h+index);
-                                                    cellText2.setAttribute('style','margin: 0px;');
-                                                    cell21.appendChild(cellText2);
-                                                row2.appendChild(cell21);
-                                            tblBody2.appendChild(row2);    
-                                        }
-                                    tbl2.appendChild(tblBody2);
-                                cell2.appendChild(tbl2); 
-                            row.appendChild(cell2);  
-                            cellRating = document.createElement("td");
-                                //button
-                                button = document.createElement("button");
-                                button.setAttribute('id', 'Book'+h);
-                                cellRating.appendChild(button);
-                                cellTextRating = document.createElement("p");
-                                cellTextRating.setAttribute('id','rating'+h);
-                                cellTextRating.setAttribute('style','margin: 0px;');
-                                cellRating.appendChild(cellTextRating);                
-                            row.appendChild(cellRating);        
-                        tblBody.appendChild(row);
-                    tbl.appendChild(tblBody);
-                td.appendChild(tbl);
-            tr.appendChild(td);
+        td = document.createElement("td");
+            tbl = document.createElement("table");
+                tblBody = document.createElement("tbody");
+                    row = document.createElement("tr");
+                        cell = document.createElement("td");
+                            cellText = document.createElement("img");
+                                cellText.setAttribute('id','img');
+                                cellText.setAttribute('src','../img/awm.jpg');
+                                cellText.setAttribute('height','60px');
+                                cellText.setAttribute('width','60px');
+                            cell.appendChild(cellText);
+                        row.appendChild(cell);
+                        cell2 = document.createElement("td");
+                            tbl2 = document.createElement("table");
+                                tblBody2 = document.createElement("tbody");
+                                    for (let index = 0; index < 3; index++) {
+                                        row2 = document.createElement("tr");
+                                            cell21 = document.createElement("td");
+                                                cellText2 = document.createElement("p");
+                                                cellText2.setAttribute('id','mech_'+h+index);
+                                                cellText2.setAttribute('style','margin: 0px;');
+                                                cell21.appendChild(cellText2);
+                                            row2.appendChild(cell21);
+                                        tblBody2.appendChild(row2);    
+                                    }
+                                tbl2.appendChild(tblBody2);
+                            cell2.appendChild(tbl2); 
+                        row.appendChild(cell2);  
+                        cellRating = document.createElement("td");
+                            button = document.createElement("button");
+                            button.setAttribute('id', 'Book'+h);
+                            cellRating.appendChild(button);
+                            cellTextRating = document.createElement("p");
+                            cellTextRating.setAttribute('id','rating'+h);
+                            cellTextRating.setAttribute('style','margin: 0px;');
+                            cellRating.appendChild(cellTextRating);                
+                        row.appendChild(cellRating);        
+                    tblBody.appendChild(row);
+                tbl.appendChild(tblBody);
+            td.appendChild(tbl);
+        tr.appendChild(td);
         body.appendChild(tr);
-        dist[h] = parseInt(distance(mech_lat[h], mech_lng[h], lat, lng));
-        //dynamicSort();
+        tbl.setAttribute('class','mech_list1');
+        dist[h] = parseInt(distance(element[3], element[4], lat, lng));
         document.getElementById("mech_"+h+"2").innerHTML = 'Distance: '+dist[h];
         document.getElementById("Book"+h).innerHTML = 'Book';
-        document.getElementById("mech_"+h+"0").innerHTML = 'Name: '+mechname[h];
-        document.getElementById("mech_"+h+"1").innerHTML = 'Phone: +91'+mechph[h];
+        document.getElementById("mech_"+h+"0").innerHTML = 'Name: '+element[1];
+        document.getElementById("mech_"+h+"1").innerHTML = 'Phone: +91'+element[2];
         document.getElementById("rating"+h).innerHTML = 'No Rating';
-        h++;
-    });   
+    };
 }
-xmlhttp.open("POST", "../s.php");
-xmlhttp.send();
+
+//Notification
+function Notification(){
+
+}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2021 at 03:12 PM
+-- Generation Time: Oct 06, 2021 at 01:03 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `customer` (
+  `imgname` varchar(16) DEFAULT NULL,
   `id_no` bigint(10) NOT NULL,
   `name` varchar(20) NOT NULL,
   `phone_no` bigint(10) NOT NULL,
@@ -44,6 +45,7 @@ CREATE TABLE `customer` (
 
 CREATE TABLE `feedback` (
   `request_id` bigint(15) NOT NULL,
+  `m_id` bigint(10) NOT NULL,
   `rating` int(1) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `date` datetime(6) NOT NULL
@@ -56,12 +58,15 @@ CREATE TABLE `feedback` (
 --
 
 CREATE TABLE `mechanic` (
+  `imgname` varchar(16) DEFAULT NULL,
   `id_no` bigint(10) NOT NULL,
   `adhaar_no` bigint(12) NOT NULL,
   `name` varchar(20) NOT NULL,
   `phone_no` bigint(10) NOT NULL,
   `email_id` varchar(50) NOT NULL,
   `password` varchar(64) NOT NULL,
+  `gar_loc_lat` float NOT NULL,
+  `gar_loc_lng` float NOT NULL,
   `model_no` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -69,9 +74,9 @@ CREATE TABLE `mechanic` (
 -- Dumping data for table `mechanic`
 --
 
-INSERT INTO `mechanic` (`id_no`, `adhaar_no`, `name`, `phone_no`, `email_id`, `password`, `model_no`) VALUES
-(1, 123456789012, 'Faizan', 2345673456, 'ffgdse@gmail.com', 'ajlfjsjafl', NULL),
-(11, 123456789013, 'safsfgas', 8765453232, 'hhdfdsfas@gmail.com', 'wertyuiop', NULL);
+INSERT INTO `mechanic` (`imgname`, `id_no`, `adhaar_no`, `name`, `phone_no`, `email_id`, `password`, `gar_loc_lat`, `gar_loc_lng`, `model_no`) VALUES
+('', 1, 123456789012, 'Faizan', 2345673456, 'ffgdse@gmail.com', 'ajlfjsjafl', 15.3465, 75.1455, NULL),
+('', 11, 123456789013, 'safsfgas', 8765453232, 'hhdfdsfas@gmail.com', 'wertyuiop', 15, 75, NULL);
 
 -- --------------------------------------------------------
 
@@ -86,6 +91,7 @@ CREATE TABLE `service_log` (
   `c_phno` bigint(10) NOT NULL,
   `c_loc_lat` float NOT NULL,
   `c_loc_lon` float NOT NULL,
+  `status` enum('Waiting','Accepted','Rejected','Cancelled') NOT NULL,
   `request_id` bigint(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -104,7 +110,7 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `feedback`
   ADD UNIQUE KEY `request_id` (`request_id`),
-  ADD KEY `req_id` (`request_id`);
+  ADD KEY `m_id` (`m_id`);
 
 --
 -- Indexes for table `mechanic`
@@ -128,7 +134,7 @@ ALTER TABLE `service_log`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `mechanic`
@@ -150,6 +156,7 @@ ALTER TABLE `service_log`
 -- Constraints for table `feedback`
 --
 ALTER TABLE `feedback`
+  ADD CONSTRAINT `mech_id` FOREIGN KEY (`m_id`) REFERENCES `mechanic` (`id_no`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `req_id` FOREIGN KEY (`request_id`) REFERENCES `service_log` (`request_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
