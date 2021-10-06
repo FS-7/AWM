@@ -26,7 +26,6 @@ xmlhttp.onload = function() {
         addBubble(Arr[h], h);
         h++;
     });
-    console.log(Arr);
     mechlist();
 }
 xmlhttp.open("POST", "../back-end/s.php");
@@ -192,8 +191,7 @@ function mechlist(){
                     row = document.createElement("tr");
                         cell = document.createElement("td");
                             cellText = document.createElement("img");
-                                cellText.setAttribute('id','img');
-                                cellText.setAttribute('src','../img/awm.jpg');
+                                cellText.setAttribute('id','img_'+h);
                                 cellText.setAttribute('height','60px');
                                 cellText.setAttribute('width','60px');
                             cell.appendChild(cellText);
@@ -205,7 +203,7 @@ function mechlist(){
                                         row2 = document.createElement("tr");
                                             cell21 = document.createElement("td");
                                                 cellText2 = document.createElement("p");
-                                                cellText2.setAttribute('id','mech_'+h+index);
+                                                cellText2.setAttribute('id','mech_'+index+h);
                                                 cellText2.setAttribute('style','margin: 0px;');
                                                 cell21.appendChild(cellText2);
                                             row2.appendChild(cell21);
@@ -235,4 +233,13 @@ function mechlist(){
 //Notification
 function Notification(){
 
+}
+
+function no_use(params) {
+    cellText.setAttribute('src','../img/'+img);
+    document.getElementById('mech_0'+h).innerHTML = '';
+    document.getElementById('mech_1'+h).innerHTML = '';
+    document.getElementById('mech_2'+h).innerHTML = '';
+    document.getElementById('Book'+h).innerHTML = '';
+    document.getElementById('rating'+h).innerHTML = '';
 }
