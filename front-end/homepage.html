@@ -43,11 +43,11 @@
                 <!--mechanic list-->
                 <div class="lower-right" placeholder="list"><br>
                 <p id="list"><strong>SORT BY: </strong> </p>
-                    <select style="float: left;">
+                    <select style="float: left;" id='lol' onchange="findNearestMech(value);">
                         <option value="Name">Name</option>
                         <option value="Distance">Distance</option> 
                     </select>
-                    <input type="button" value="Locate" onclick=findNearestMech();><br><br>
+                    <input type="button" value="Locate" onclick=ds();><br><br>
                     
                 <table class='mec_list' id='mech_list'></table>
                 <script src='maps.js'></script>

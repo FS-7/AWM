@@ -15,22 +15,25 @@ var lat=0, lng=0;
 var marker = new H.map.Marker({ lat, lng });
 
 var Arr = new Array();
-var h=0;
+
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onload = function() {
+    var h=0, {lat: x, lng: y} = marker.getGeometry();
     var myObj = JSON.parse(this.responseText);
     myObj.forEach(element => {
         Arr[h] = element;
-        addBubble(Arr[h]);
+        Arr[h].push(parseInt(distance(element[3], element[4], x, y)));
+        addBubble(Arr[h], h);
         h++;
     });
+    console.log(Arr);
     mechlist();
 }
 xmlhttp.open("POST", "../back-end/s.php");
 xmlhttp.send();
 
 //mechanic markers
-function addBubble(element) {
+function addBubble(element, h) {
     var value = {lat: element[3], lng: element[4]};
     if(element[5]==''){
         element[5]='awm.jpg';
@@ -139,13 +142,12 @@ function addDraggableMarker(map, behavior){
 
 //
 var coords = [{ lat:15, lng:75}];
-function findNearestMech() {
+function findNearestMech(sorttype) {
     var max_dist = 1000;
     var locate = marker.getGeometry();
     var bubbles = ui.getBubbles();
     console.log(bubbles[0].getBubbles());
     //console.log(bubbles[0].getGeometry().distance(coords));
-   
 }
 
 //
@@ -155,6 +157,13 @@ function distance(lat1, lon1, lat2, lon2) {
     var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
     return 12742 * Math.asin(Math.sqrt(a));
     //document.getElementById("mech_"+h+"2").innerHTML = 'Distance: '+dist[h];
+}
+
+function ds(){
+    Arr.forEach(e => {
+        var {lat: x, lng: y} = marker.getGeometry();
+        e[6] = parseInt(distance(e[3], e[4], x, y));
+    });
 }
 
 function dynamicSort(property) {
@@ -220,12 +229,6 @@ function mechlist(){
         tr.appendChild(td);
         body.appendChild(tr);
         tbl.setAttribute('class','mech_list1');
-        dist[h] = parseInt(distance(element[3], element[4], lat, lng));
-        document.getElementById("mech_"+h+"2").innerHTML = 'Distance: '+dist[h];
-        document.getElementById("Book"+h).innerHTML = 'Book';
-        document.getElementById("mech_"+h+"0").innerHTML = 'Name: '+element[1];
-        document.getElementById("mech_"+h+"1").innerHTML = 'Phone: +91'+element[2];
-        document.getElementById("rating"+h).innerHTML = 'No Rating';
     };
 }
 
