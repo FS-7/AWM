@@ -42,7 +42,7 @@ body{
     margin: 0px 0px 0px 0px;
     display: block;
     border-radius: 2%;
-    background-color:  rgba(157, 57, 65, 0.747);
+    background: linear-gradient(to top left, rgba(49, 69, 128, 0.7) 0%, rgba(126, 56, 75, 1) 100%);
 }
 
 .upper{
@@ -66,7 +66,7 @@ body{
     margin: 5% 0px 0px 0px;
     float: left;
     border: 1px solid #000000;
-    background: linear-gradient(to right, #990000 0%, #d68c1de8 100%);
+    background: linear-gradient(to right, rgba(49, 69, 128, .7) 0%, rgba(126, 56, 75, 0.7) 100%);
     border-radius: 2px;
 }
 
@@ -79,6 +79,8 @@ body{
     text-align: left;
     font-size: 25px;
     font-weight: bolder;
+    font-family: Lucida Bright;
+    color: white;
 }
 
 .upper-left input[type=text] {

@@ -89,6 +89,7 @@ function RGC(x, y) {
             ui.removeBubble(bubblex);
             ui.addBubble(bubble);
             bubblex = bubble;
+            ds();
         });
     }, alert);
 }
@@ -227,6 +228,7 @@ function mechlist(){
         tr.appendChild(td);
         body.appendChild(tr);
         tbl.setAttribute('class','mech_list1');
+        tbl.setAttribute('id',h);
     };
 }
 
