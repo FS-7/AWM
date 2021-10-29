@@ -14,52 +14,64 @@
     </head>
     <body>
         <center>
-        <div class="header">
-            <div class="logo">
-                <!--logo-->
-                <a href="#default" class="logo"> <img src="awm.jpg"> ANY WHERE MECHANIC</a>
-            </div>
-            <div class="header-right">
-                <!--buttons-->
-                <a class="active" href="">Home</a>
-                <a href="">Contact</a>
-                <a href="">About</a>
-                <a href="">Feedback</a>
-            </div>
-        </div>
-        <form action="../back-end/homepage.php" method="POST"></form>
-        <!--body-->
-        <div class="body">
-            <div class="upper">
-                <div class="upper-left"> 
-                    <!--search bar-->
-                    <label class='txtlabel'>Find Mechanic</label>
-                    <input type="text" name="search" placeholder=" Search.." id="search"/>
-                    <button type="button" onclick=navigator.geolocation.getCurrentPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
-                    <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
+            <div class='main'>
+                <div class="header">
+                    <div class="logo">
+                        <!--logo-->
+                        <a href="#default" class="logo"> 
+                            <div class='img'>
+                                <img src="../img/awm.jpg" height='60px' width="60px">
+                            </div><p style="padding: 0px 10px; margin: 0px auto; float: left; transform: translateY(50%);">ANY WHERE MECHANIC</p> 
+                        </a>
+                    </div>
+                    <div class="header-right">
+                        <!--buttons-->
+                        <a href="">Home</a>
+                        <a href="">Contact</a>
+                        <a href="">About</a>
+                        <a href="">Feedback</a>
+                    </div>
                 </div>
-
-                <div class="upper-right" id='notification'></div>
-            </div>
-            <div class="lower">
-                <!--MAPS-->
-                <div class="lower-left" id="map"></div>
-                
-                <!--mechanic list-->
-                <div class="lower-right" placeholder="list"><br>
-                <p id="list"><strong>SORT BY: </strong> </p>
-                    <select style="float: left;" id='lol' onchange="findNearestMech(value);">
-                        <option value="Name">Name</option>
-                        <option value="Distance">Distance</option> 
-                    </select>
-                    <input type="button" value="Locate" onclick=ds();><br><br>
-                    
-                <table class='mec_list' id='mech_list'></table>
-                <script src='maps.js'></script>
+                <form action="../back-end/homepage.php" method="POST"></form>
+                <!--body-->
+                <div class="body">
+                    <div class="upper">
+                        <div class="upper-left"> 
+                            <!--search bar-->
+                            <label class='txtlabel'>Find Mechanic</label>
+                            <input type="text" name="search" placeholder=" Search.." id="search" required/>
+                            <button type="button" onclick=navigator.geolocation.getCurrentPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
+                            <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
+                        </div>
+        
+                        <div class="upper-right" >
+                            <table id='notification'>
+                                <tr>
+                                    <td><strong>Notifications: </strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <script src="cal.js"></script>
+                    </div>
+                    <div class="lower">
+                        <!--MAPS-->
+                        <div class="lower-left" id="map"></div>
+                        
+                        <!--mechanic list-->
+                        <div class="lower-right" placeholder="list"><br>
+                        <p id="list"><strong>SORT BY: </strong> </p>
+                            <select style="float: left;" id='lol' onchange="dynamicSort(parseInt(value));">
+                                <option value="1">Name</option>
+                                <option value="6" selected>Distance</option> 
+                            </select>
+                        <form id='serv' method="POST" action='../back-end/service_log.php'>
+                            <table class='mec_list' id='mech_list'></table>
+                        </form>
+                        <script src='maps.js'></script>
+                        </div>
+                    </div>     
                 </div>
-            </div>     
-        </div>
-        </form>
+            </div>
         </center>
     </body>
 </html>

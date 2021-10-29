@@ -1,3 +1,4 @@
+//Maps
 const platform = new H.service.Platform({ apikey: 'D_6Bq02OZ4b2BBwXAJYFlZ6yHIixKl0Q5ym9lUlNhxg' });
 const defaultLayers = platform.createDefaultLayers();
 const map = new H.Map(document.getElementById('map'),
@@ -14,6 +15,7 @@ const ui = H.ui.UI.createDefault(map, defaultLayers);
 var lat=0, lng=0;
 var marker = new H.map.Marker({ lat, lng });
 
+//Lower-right
 var Arr = new Array();
 
 xmlhttp = new XMLHttpRequest();
@@ -27,14 +29,15 @@ xmlhttp.onload = function() {
         h++;
     });
     mechlist();
+    dynamicSort(6);
 }
-xmlhttp.open("POST", "../back-end/s.php");
+xmlhttp.open("POST", "../back-end/maps.php");
 xmlhttp.send();
 
 //mechanic markers
 function addBubble(element, h) {
     var value = {lat: element[3], lng: element[4]};
-    if(element[5]==''){
+    if(element[5]=='' || element[5]==null){
         element[5]='awm.jpg';
     }
     var html = '<div><img id="mechimg_'+h+'"></div>'+'<div><p id="info_'+h+'"></p></div>';
@@ -60,6 +63,7 @@ function SYL() {
         const { Latitude : lat, Longitude: lng } = location;
         marker.setGeometry({lat, lng});
         map.addObject(marker);
+        ds();
         map.setCenter({lat, lng});
         map.setZoom(14);
     });
@@ -106,6 +110,7 @@ function updatePosition (event) {
     map.addObject(marker);
     map.setCenter(HEREHQcoordinates);
     map.setZoom(14);
+    ds();
     addDraggableMarker(map, behavior);
 }
 
@@ -126,6 +131,7 @@ function addDraggableMarker(map, behavior){
         if (target instanceof H.map.Marker) {
             behavior.enable();
         }
+        ds();
     }, false);
 
     map.addEventListener('drag', function(ev) {
@@ -137,53 +143,30 @@ function addDraggableMarker(map, behavior){
     }, false);
 }
 
-//lower-right.js
+//lower-right
 
-
-//
-var coords = [{ lat:15, lng:75}];
-function findNearestMech(sorttype) {
-    var max_dist = 1000;
-    var locate = marker.getGeometry();
-    var bubbles = ui.getBubbles();
-    console.log(bubbles[0].getBubbles());
-    //console.log(bubbles[0].getGeometry().distance(coords));
-}
-
-//
+//Distance
 function distance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = Math.cos;
     var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
     return 12742 * Math.asin(Math.sqrt(a));
-    //document.getElementById("mech_"+h+"2").innerHTML = 'Distance: '+dist[h];
 }
 
 function ds(){
+    x = document.getElementById('lol').value;
     Arr.forEach(e => {
         var {lat: x, lng: y} = marker.getGeometry();
         e[6] = parseInt(distance(e[3], e[4], x, y));
     });
-}
-
-function dynamicSort(property) {
-    var distn = new Array();
-    var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
+    dynamicSort(x);
 }
 
 //mechanic list 
 var dist = new Array();
 var body = document.getElementById('mech_list');
 function mechlist(){
-    for(h=0; h<4 && h<Arr.length; h++){
+    for(h=0; h<4 && h < Arr.length; h++){
         element = Arr[h]; 
         tr = document.createElement("tr");
         td = document.createElement("td");
@@ -191,11 +174,7 @@ function mechlist(){
                 tblBody = document.createElement("tbody");
                     row = document.createElement("tr");
                         cell = document.createElement("td");
-                            cellText = document.createElement("img");
-                                cellText.setAttribute('id','img_'+h);
-                                cellText.setAttribute('height','60px');
-                                cellText.setAttribute('width','60px');
-                            cell.appendChild(cellText);
+                            cell.setAttribute('id','img_'+h);
                         row.appendChild(cell);
                         cell2 = document.createElement("td");
                             tbl2 = document.createElement("table");
@@ -214,7 +193,8 @@ function mechlist(){
                             cell2.appendChild(tbl2); 
                         row.appendChild(cell2);  
                         cellRating = document.createElement("td");
-                            button = document.createElement("button");
+                            button = document.createElement("input");
+                            button.setAttribute('type', 'submit');
                             button.setAttribute('id', 'Book'+h);
                             cellRating.appendChild(button);
                             cellTextRating = document.createElement("p");
@@ -232,16 +212,31 @@ function mechlist(){
     };
 }
 
-//Notification
-function Notification(){
-
+function dynamicSort(x) {
+    var distn = new Array();
+    //distn[0] = Arr[0];
+    var i=0, j=0;
+    for (i = 0; i < Arr.length; i++) {
+        var j=distn.length-1;
+        while(j!=-1 && distn[j][x]>Arr[i][x]){
+            distn[j+1]=distn[j];
+            j--;
+        }
+        distn[j+1]=Arr[i];   
+    }
+    Table(distn);
 }
 
-function no_use(params) {
-    cellText.setAttribute('src','../img/'+img);
-    document.getElementById('mech_0'+h).innerHTML = '';
-    document.getElementById('mech_1'+h).innerHTML = '';
-    document.getElementById('mech_2'+h).innerHTML = '';
-    document.getElementById('Book'+h).innerHTML = '';
-    document.getElementById('rating'+h).innerHTML = '';
+function Table(distn) {
+    var h=0;
+    while (h<4 && h<distn.length ) {
+        document.getElementById('img_'+h).innerHTML = '<img src="../img/'+distn[h][5]+'" height="60px" width="60px">';
+        document.getElementById('mech_0'+h).innerHTML = 'Name: '+distn[h][1];
+        document.getElementById('mech_1'+h).innerHTML = 'Phone: '+distn[h][2];
+        document.getElementById('mech_2'+h).innerHTML = 'Distance: '+distn[h][6]+'km';
+        document.getElementById('Book'+h).innerHTML = 'Book';
+        document.getElementById('Book'+h).name = distn[h][0];
+        document.getElementById('rating'+h).innerHTML = 'No Rating';
+        h++;
+    }
 }
