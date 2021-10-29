@@ -1,4 +1,8 @@
+//                  INITIALIZATION
+
 //Maps
+check=0;
+var marker;
 const platform = new H.service.Platform({ apikey: 'D_6Bq02OZ4b2BBwXAJYFlZ6yHIixKl0Q5ym9lUlNhxg' });
 const defaultLayers = platform.createDefaultLayers();
 const map = new H.Map(document.getElementById('map'),
@@ -12,27 +16,6 @@ const map = new H.Map(document.getElementById('map'),
 window.addEventListener('resize', () => map.getViewPort().resize());
 const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 const ui = H.ui.UI.createDefault(map, defaultLayers);
-var lat=0, lng=0;
-var marker = new H.map.Marker({ lat, lng });
-
-//Lower-right
-var Arr = new Array();
-
-xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-    var h=0, {lat: x, lng: y} = marker.getGeometry();
-    var myObj = JSON.parse(this.responseText);
-    myObj.forEach(element => {
-        Arr[h] = element;
-        Arr[h].push(parseInt(distance(element[3], element[4], x, y)));
-        addBubble(Arr[h], h);
-        h++;
-    });
-    mechlist();
-    dynamicSort(6);
-}
-xmlhttp.open("POST", "../back-end/maps.php");
-xmlhttp.send();
 
 //mechanic markers
 function addBubble(element, h) {
@@ -54,18 +37,49 @@ function addBubble(element, h) {
     info.setAttribute('style', 'font-size: 12px;');  
 }
 
-//Search your Location
-function SYL() {
+//Lower-right
+var Arr = new Array();
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onload = function() {
+    var h=0;
+    var myObj = JSON.parse(this.responseText);
+    myObj.forEach(element => {
+        Arr[h] = element;
+        Arr[h].push(parseInt(distance(element[3], element[4], x=null, y=null)));
+        addBubble(Arr[h], h);
+        h++;
+    });
+    mechlist();
+    dynamicSort(6);
+}
+xmlhttp.open("POST", "../back-end/maps.php");
+xmlhttp.send();
+
+//                             ADD LOCATION + MARKER
+
+//adds marker
+function fnc_marker(location) {
+    if(!check){
+        marker = new H.map.Marker(location);   
+    }
+    marker.setGeometry(location);
+    map.addObject(marker);
+    map.setCenter(location);
+    map.setZoom(14);
+    check=1;
+    ds(location.lat, location.lng);
+}
+
+//Search Text Location
+function STL() {
     const searchText = document.getElementById('search').value;
     const geocoder = platform.getGeocodingService();
     geocoder.geocode({ searchText }, result => {
         const location = result.Response.View[0].Result[0].Location.DisplayPosition;
-        const { Latitude : lat, Longitude: lng } = location;
-        marker.setGeometry({lat, lng});
-        map.addObject(marker);
-        ds();
-        map.setCenter({lat, lng});
-        map.setZoom(14);
+        const {Latitude: lat, Longitude: lng} = location;
+        coords = {lat: lat, lng: lng};
+        fnc_marker(coords);
     });
 }
 
@@ -76,7 +90,6 @@ function setUpClickListener(map) {
         lat = Math.abs(coord.lat.toFixed(4)); 
         lng = Math.abs(coord.lng.toFixed(4));
         RGC(lat, lng);
-        marker.setGeometry({ lat, lng });
     });
 }
 
@@ -93,7 +106,10 @@ function RGC(x, y) {
             ui.removeBubble(bubblex);
             ui.addBubble(bubble);
             bubblex = bubble;
-            ds();
+            coords = {lat: x, lng: y};
+            fnc_marker(coords);
+            map.removeObject(marker);
+            ds(x, y);
         });
     }, alert);
 }
@@ -105,12 +121,8 @@ function updatePosition (event) {
         lat: event.coords.latitude,
         lng: event.coords.longitude,
     };
-    marker.setGeometry(HEREHQcoordinates);
+    fnc_marker(HEREHQcoordinates);
     marker.draggable = true;
-    map.addObject(marker);
-    map.setCenter(HEREHQcoordinates);
-    map.setZoom(14);
-    ds();
     addDraggableMarker(map, behavior);
 }
 
@@ -131,7 +143,7 @@ function addDraggableMarker(map, behavior){
         if (target instanceof H.map.Marker) {
             behavior.enable();
         }
-        ds();
+        ds(marker.getGeometry().lat, marker.getGeometry().lng);
     }, false);
 
     map.addEventListener('drag', function(ev) {
@@ -143,7 +155,7 @@ function addDraggableMarker(map, behavior){
     }, false);
 }
 
-//lower-right
+//                      OTHER FUNCTIONS
 
 //Distance
 function distance(lat1, lon1, lat2, lon2) {
@@ -153,13 +165,26 @@ function distance(lat1, lon1, lat2, lon2) {
     return 12742 * Math.asin(Math.sqrt(a));
 }
 
-function ds(){
+function ds(x, y){
     x = document.getElementById('lol').value;
     Arr.forEach(e => {
-        var {lat: x, lng: y} = marker.getGeometry();
         e[6] = parseInt(distance(e[3], e[4], x, y));
     });
     dynamicSort(x);
+}
+
+function dynamicSort(x) {
+    var distn = new Array();
+    var i=0, j=0;
+    for (i = 0; i < Arr.length; i++) {
+        var j=distn.length-1;
+        while(j!=-1 && distn[j][x]>Arr[i][x]){
+            distn[j+1]=distn[j];
+            j--;
+        }
+        distn[j+1]=Arr[i];   
+    }
+    Table(distn);
 }
 
 //mechanic list 
@@ -195,9 +220,12 @@ function mechlist(){
                         cellRating = document.createElement("td");
                             button = document.createElement("input");
                             button.setAttribute('type', 'submit');
+                            button.setAttribute('class', 'Book');
+                            button.setAttribute('onclick', 'book(this)');
                             button.setAttribute('id', 'Book'+h);
                             cellRating.appendChild(button);
                             cellTextRating = document.createElement("p");
+                            cellTextRating.setAttribute('class','rating');
                             cellTextRating.setAttribute('id','rating'+h);
                             cellTextRating.setAttribute('style','margin: 0px;');
                             cellRating.appendChild(cellTextRating);                
@@ -212,31 +240,20 @@ function mechlist(){
     };
 }
 
-function dynamicSort(x) {
-    var distn = new Array();
-    //distn[0] = Arr[0];
-    var i=0, j=0;
-    for (i = 0; i < Arr.length; i++) {
-        var j=distn.length-1;
-        while(j!=-1 && distn[j][x]>Arr[i][x]){
-            distn[j+1]=distn[j];
-            j--;
-        }
-        distn[j+1]=Arr[i];   
-    }
-    Table(distn);
-}
-
 function Table(distn) {
     var h=0;
     while (h<4 && h<distn.length ) {
         document.getElementById('img_'+h).innerHTML = '<img src="../img/'+distn[h][5]+'" height="60px" width="60px">';
         document.getElementById('mech_0'+h).innerHTML = 'Name: '+distn[h][1];
         document.getElementById('mech_1'+h).innerHTML = 'Phone: '+distn[h][2];
-        document.getElementById('mech_2'+h).innerHTML = 'Distance: '+distn[h][6]+'km';
-        document.getElementById('Book'+h).innerHTML = 'Book';
+        if(distn[h][6]=='NaN'){
+            document.getElementById('mech_2'+h).innerHTML = 'Distance: Enter location';
+        }else{
+            document.getElementById('mech_2'+h).innerHTML = 'Distance: '+distn[h][6]+'km';
+        }
+        document.getElementById('Book'+h).value = 'Book';
         document.getElementById('Book'+h).name = distn[h][0];
-        document.getElementById('rating'+h).innerHTML = 'No Rating';
+        document.getElementById('rating'+h).innerHTML = 'NR';
         h++;
     }
 }

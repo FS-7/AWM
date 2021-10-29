@@ -1,20 +1,19 @@
 var C_Arr = new Array();
-lat=0, lng=0;
-var marker = new H.map.Marker({ lat, lng });
+var h=0;
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onload = function() {
-    var h=0, {lat: x, lng: y} = marker.getGeometry();
+    //console.log(this.responseText);
     var myObj = JSON.parse(this.responseText);
     myObj.forEach(element => {
         C_Arr[h] = element;
         loc(element[4], element[5], h);
-        console.log(C_Arr);
         h++;
     });
 }
 xmlhttp.open("POST", "../back-end/cal.php");
-xmlhttp.send();
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send('id=301');
 
 var add;
 function loc(x, y, h) {
@@ -23,12 +22,11 @@ function loc(x, y, h) {
     }, (result) => {
         add = result.items[0].title;
         C_Arr[h].push(add);
-        console.log(add);
     }, alert);
 }
 
 function notify() {
-    body = document.getElementById('notification');
+    body = document.getElementById('status');
     tr = document.createElement('tr');
         td = document.createElement('td');
             strong = document.createElement('strong');
@@ -55,20 +53,55 @@ function notify() {
             button1 = document.createElement('button');
                 button1.setAttribute('id', 'acc');
             td2.appendChild(button1);
-            br = document.createElement('br');
-            td2.appendChild(br);
             button2 = document.createElement('button');
                 button2.setAttribute('id', 'rej');
             td2.appendChild(button2);
+            td2.setAttribute('id','stat_right')
         tr.appendChild(td2);
     body.appendChild(tr);
+    document.getElementById('acc').innerHTML = 'ACCEPT';
+    document.getElementById('rej').innerHTML = 'REJECT';
 }
-notify();
+//notify();
+
+function c_stat() {
+    body = document.getElementById('status');
+    tr = document.createElement('tr');
+        td = document.createElement('td');
+            strong = document.createElement('strong');
+                table = document.createElement('table');
+                    row = document.createElement('tr');
+                        cell = document.createElement('td');
+                            cell.setAttribute('id', 'mech_name');
+                        row.appendChild(cell);
+                    table.appendChild(row);
+                    row = document.createElement('tr');
+                        cell = document.createElement('td');
+                            cell.setAttribute('id', 'Distance');
+                        row.appendChild(cell);
+                    table.appendChild(row);
+                    row = document.createElement('tr');
+                        cell = document.createElement('td');
+                            cell.setAttribute('id', 'Location');
+                        row.appendChild(cell);
+                    table.appendChild(row);
+                strong.appendChild(table);
+            td.appendChild(strong);
+        tr.appendChild(td);
+        td2 = document.createElement('td');
+            button2 = document.createElement('button');
+                button2.setAttribute('id', 'cancel');
+            td2.appendChild(button2);
+            td2.setAttribute('id','stat_right')
+        tr.appendChild(td2);
+    body.appendChild(tr);
+    document.getElementById('cancel').innerHTML = 'CANCEL';
+}
+c_stat();
 
 function service(){
 
 }
-
 
 var lat_s=0, lat_d=0, lng_s=0, lng_d=0;
 //routing

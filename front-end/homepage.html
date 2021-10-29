@@ -11,6 +11,7 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+        <script src='../ser.js'></script>
     </head>
     <body>
         <center>
@@ -39,15 +40,15 @@
                         <div class="upper-left"> 
                             <!--search bar-->
                             <label class='txtlabel'>Find Mechanic</label>
-                            <input type="text" name="search" placeholder=" Search.." id="search" required/>
+                            <input type="text" name="search" placeholder=" Search.." id="search" onsubmit="STL();" required/>
                             <button type="button" onclick=navigator.geolocation.getCurrentPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
-                            <button type="submit" onclick=SYL();><i class="fa fa-search"></i></button>
+                            <button type="submit" onclick=STL();><i class="fa fa-search"></i></button>
                         </div>
         
                         <div class="upper-right" >
-                            <table id='notification'>
+                            <table id='status'>
                                 <tr>
-                                    <td><strong>Notifications: </strong></td>
+                                    <td><strong>Status: </strong></td>
                                 </tr>
                             </table>
                         </div>
@@ -64,9 +65,7 @@
                                 <option value="1">Name</option>
                                 <option value="6" selected>Distance</option> 
                             </select>
-                        <form id='serv' method="POST" action='../back-end/service_log.php'>
-                            <table class='mec_list' id='mech_list'></table>
-                        </form>
+                        <table class='mec_list' id='mech_list'></table>
                         <script src='maps.js'></script>
                         </div>
                     </div>     

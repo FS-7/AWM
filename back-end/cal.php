@@ -3,9 +3,9 @@ class Cls{
 
 }
 $arr = new Cls;
-$ray = Array();
+$id=301;
 $conn = mysqli_connect("localhost", "root", "", "awm");
-$q = mysqli_query($conn, "SELECT request_id, m_id, c_id, phone_no, c_loc_lat, c_loc_lon, status FROM service_log, customer where customer.id_no = service_log.c_id");
+$q = mysqli_query($conn, "SELECT * FROM service_log where c_id=$id");
 while ($row = mysqli_fetch_all($q)){
     $arr = $row;
     echo json_encode($arr); 

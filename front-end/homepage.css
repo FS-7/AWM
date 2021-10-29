@@ -181,6 +181,31 @@ body{
     float: right;
 }
 
+.rating{
+    text-align: center;
+}
+
+.Book{
+    float: right;
+    appearance: auto;
+    user-select: none;
+    white-space: pre;
+    align-items: flex-start;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 1px 6px;
+    border-image: initial;
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: rgba(126, 56, 75, 1);
+    text-align: center;
+}
+
+.Book:hover{
+    background-color: rgba(49, 69, 128, 0.7);
+    color: white;
+}
+
 .mec_list{
     height: 85%;
     width: 80%;
@@ -189,6 +214,10 @@ body{
     border: 1px solid black;
     text-align: left;
     background: linear-gradient(to bottom right, rgba(49, 69, 128, 0.7) 0%, rgba(126, 56, 75, 1) 100%);
+}
+
+.mechlist1 tr td{
+    width: 56%;
 }
 
 #list{
@@ -210,7 +239,7 @@ select#lol{
     display: block;
 }
 
-#notification{
+#status{
     height: 100%;
     width: 80%;
     border: 1px solid black;
@@ -222,4 +251,27 @@ select#lol{
     margin: -12% 0% 0% 10%;
     text-align: left;
     font-family: Lucida Bright;
+}
+
+#status button{
+    width: 60px;
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 0px 4px;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 18px;
+    border-radius: 2px;
+    border: 1px solid black;
+    background-color: rgba(126, 56, 75, 1);
+}
+
+#status button:hover{
+    background-color: rgba(49, 69, 128, 0.7);
+    color: white;
+}
+
+#stat_right{
+    width: 125px;
 }
