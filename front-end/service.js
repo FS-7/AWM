@@ -1,11 +1,10 @@
 //                     ADD LOCATION + MARKER
 
 //adds marker
-var marker;
+var service = platform.getSearchService();
+var temp = new Array(), completelynew = new Array() ;
+var marker, bubble, bubblex;
 function fnc_marker(location) {
-    if(marker){
-        map.removeObject(marker);
-    }
     marker = new H.map.Marker(location);
     map.addObject(marker);
     map.setCenter(location);
@@ -23,6 +22,9 @@ function STL() {
         const location = result.Response.View[0].Result[0].Location.DisplayPosition;
         const {Latitude: lat, Longitude: lng} = location;
         coords = {lat: lat, lng: lng};
+        if(marker){
+            map.removeObject(marker);
+        }
         fnc_marker(coords);
     });
 }
@@ -37,8 +39,6 @@ function setUpClickListener(map) {
     });
 }
 
-var service = platform.getSearchService();
-var bubble, bubblex;
 function RGC(x, y) {
     service.reverseGeocode({
         at: ''+x+','+y+''
@@ -50,6 +50,9 @@ function RGC(x, y) {
             ui.removeBubble(bubblex);
             ui.addBubble(bubble);
             bubblex = bubble;
+            if(marker){
+                map.removeObject(marker);
+            }
             marker = fnc_marker({lat: x, lng: y});
             map.removeObject(marker);
         });
@@ -63,6 +66,9 @@ function GPS(event) {
         lat: event.coords.latitude,
         lng: event.coords.longitude,
     };
+    if(marker){
+        map.removeObject(marker);
+    }
     fnc_marker(HEREHQcoordinates);
     marker.draggable = true;
     addDraggableMarker(map, behavior);
@@ -117,7 +123,6 @@ function ds(x, y){
     }
 }
 
-var temp = new Array(); completelynew = new Array() ;
 function dynamicSort(x) {
     var dst = new Array(),
     temp = myObj;
@@ -132,16 +137,14 @@ function dynamicSort(x) {
     Table(dst);
 }
 
-var add;
-function loc(x, y, garx, gary, h) {
+var addx;
+function loc(x, y) {
     service.reverseGeocode({
         at: ''+x+','+y+''
     }, (result) => {
         add = result.items[0].title;
-        C_Arr[h].loc = add;
-        C_Arr[h].dist = parseInt(distance(x, y, garx, gary));
+        console.log(this.add);
     }, alert);
-    return true;
 }
 
 // DB VALUES
@@ -152,12 +155,12 @@ function book(book) {
     }else{
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function() {
+            console.log(this.responseText);
             alert('Booked');
-            
         }
-        xmlhttp.open("POST", "../back-end/service_log.php");
+        xmlhttp.open("POST", "../back-end/cal.php");
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send('mid='+book.name+'&lat='+marker.getGeometry().lat+'&lng='+marker.getGeometry().lng);
+        xmlhttp.send('func=book&mid='+book.name+'&lat='+marker.getGeometry().lat+'&lng='+marker.getGeometry().lng);
     }
 }
 

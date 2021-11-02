@@ -1,3 +1,5 @@
+var top1='c_tab'
+
 function Table(Table) {
     var h=0;
     while (h<4 && h<Table.length ) {
@@ -30,7 +32,6 @@ function mech_stat(){
     document.getElementById('statp').innerHTML = C_Arr[0].status;
 }
 
-var top1='c_tab'
 function update(){
     var dom_old = document.getElementById(top1).style;
     if(0){
@@ -49,7 +50,7 @@ function update(){
             dom_old.visibility='hidden';
             dom_new.visibility='visible';
             top='c_tab';
-            cust_status();
+            //cust_status();
         }
         else{
             var dom_new = document.getElementById('m_tab').style;
@@ -61,7 +62,7 @@ function update(){
         }
     }
 }
-update();
+//update();
 
 
 

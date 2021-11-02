@@ -1,3 +1,8 @@
+<?php
+session_start();
+if(isset($_SESSION['id']) && isset($_SESSION['type'])){
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,7 +32,7 @@
                         <a href="">Home</a>
                         <a href="">Feedback</a>
                         <a href="">Contact</a>
-                        <a>Logout</a>
+                        <a href="../back-end/logout.php">Logout</a>
                     </div>
                 </div>
                 <form action="../back-end/homepage.php" method="POST"></form>
@@ -60,7 +65,7 @@
                                 <option value="dist" selected>Distance</option> 
                             </select>
                         <table class='mec_list' id='mech_list'></table>
-                        <script src='maps.js'></script>
+                        <script src='init.js'></script>
                         </div>
                     </div>     
                     <script src="cal.js"></script>
@@ -70,3 +75,9 @@
         </center>
     </body>
 </html>
+<?php 
+}
+else{
+    echo "<script>alert('Please Login');window.location.assign('../index.html');</script>";
+}
+?>

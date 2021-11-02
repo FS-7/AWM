@@ -1,11 +1,11 @@
 <?php
+session_start();
 $email= $_POST['email'];
 $password=$_POST['pass'];
 if(isset($email))
 	{
 	$conn = mysqli_connect("localhost", "root", "", "awm");
 	$result=mysqli_query($conn,"SELECT *from customer where email_id='$email'");
-	session_start();	
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		if($row['password']!=$password){
 			?>
@@ -19,7 +19,7 @@ if(isset($email))
 			$_SESSION['type'] = 'customer';
 			?>
 			<script>
-			alert(<?php echo $_SESSION['id'];?>);//window.location.assign("../front-end/homepage.html");
+			window.location.assign("../front-end/homepage.php");
 			</script>
 			<?php
 		}

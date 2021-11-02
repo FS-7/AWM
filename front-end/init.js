@@ -1,9 +1,9 @@
 //                  INITIALIZATION
 
 //Maps
-check=1;
-var marker, myObj;
-var C_Arr, myObjx, h, top1='c_tab';
+var marker, myObj, C_Arr, myObjx, h, top1='c_tab';
+var dist = new Array();
+var body0 = document.getElementById('mech_list');
 
 const platform = new H.service.Platform({ apikey: 'D_6Bq02OZ4b2BBwXAJYFlZ6yHIixKl0Q5ym9lUlNhxg' });
 const defaultLayers = platform.createDefaultLayers();
@@ -38,10 +38,13 @@ function init2() {
     xmlhttp.onload = function() {
         myObjx = JSON.parse(this.responseText);
         C_Arr= Object.create(myObjx);
+        var Arr_loc = new Array();
         for (h = 0; h < myObjx.length; h++) {
-            loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng, h);
+            C_Arr[h].dist = parseInt(distance(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng));//Arr_loc[0];
+            C_Arr[h].loc = addx;//loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon);
         }
-        
+        c_stat();
+        cust_status(C_Arr);
     }
     xmlhttp.open("POST", "../back-end/cal.php");
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -73,8 +76,6 @@ function addBubble(element, h) {
 
 
 //mechanic list 
-var dist = new Array();
-var body0 = document.getElementById('mech_list');
 function mechlist(){
     for(h=0; h<4 && h < myObj.length; h++){
         tr01 = document.createElement("tr");
@@ -125,6 +126,8 @@ function mechlist(){
     Table(myObj);
 }
 
+
+//          UPPER-RIGHT TABLE, STATUS
 function m_stat() {
     m_body = document.getElementById('stat');
     strong = document.createElement('strong');
@@ -174,16 +177,7 @@ function m_stat() {
     document.getElementById('Accepted').innerHTML = 'ACCEPT';
     document.getElementById('Rejected').innerHTML = 'REJECT';
 }
-/*
-function no_notify() {
-    body = document.getElementById('stat');
-        p = document.createElement('p');
-        p.setAttribute('id', 'no_noti');
-        p.setAttribute('class', 'notify');
-        body.appendChild(p);
-    document.getElementById('no_noti').innerHTML = 'No Notification';
-}
-*/
+
 function c_stat() {
     c_body = document.getElementById('stat');
         strong = document.createElement('strong');
@@ -228,5 +222,5 @@ function c_stat() {
         c_body.appendChild(strong);
     button.setAttribute('onclick', 'task(this.id);');
     document.getElementById('Cancelled').innerHTML = 'CANCEL';
+    cust_status(C_Arr);
 }
-c_stat();
