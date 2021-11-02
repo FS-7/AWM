@@ -1,8 +1,10 @@
 //                  INITIALIZATION
 
 //Maps
-check=0;
-var marker;
+check=1;
+var marker, myObj;
+var C_Arr, myObjx, h, top1='c_tab';
+
 const platform = new H.service.Platform({ apikey: 'D_6Bq02OZ4b2BBwXAJYFlZ6yHIixKl0Q5ym9lUlNhxg' });
 const defaultLayers = platform.createDefaultLayers();
 const map = new H.Map(document.getElementById('map'),
@@ -17,11 +19,43 @@ window.addEventListener('resize', () => map.getViewPort().resize());
 const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 const ui = H.ui.UI.createDefault(map, defaultLayers);
 
+//Lower-right
+function init() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function() {
+        myObj = JSON.parse(this.responseText);
+        for(i=0; i<myObj.length; i++){
+            addBubble(myObj[i], i);
+        }
+        mechlist();
+    }
+    xmlhttp.open("POST", "../back-end/maps.php");
+    xmlhttp.send();
+}
+
+function init2() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function() {
+        myObjx = JSON.parse(this.responseText);
+        C_Arr= Object.create(myObjx);
+        for (h = 0; h < myObjx.length; h++) {
+            loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng, h);
+        }
+        
+    }
+    xmlhttp.open("POST", "../back-end/cal.php");
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("func=stat");
+}
+
+init();
+init2();
+
 //mechanic markers
 function addBubble(element, h) {
-    var value = {lat: element[3], lng: element[4]};
-    if(element[5]=='' || element[5]==null){
-        element[5]='awm.jpg';
+    var value = {lat: element.gar_loc_lat, lng: element.gar_loc_lng};
+    if(element.imgname=='' || element.imgname==null){
+        element.imgname='awm.jpg';
     }
     var html = '<div><img id="mechimg_'+h+'"></div>'+'<div><p id="info_'+h+'"></p></div>';
     var bubble = new Array();
@@ -31,229 +65,168 @@ function addBubble(element, h) {
     ui.addBubble(bubble[h]);
     var info = document.getElementById('info_'+h);
     var mechimg = document.getElementById('mechimg_'+h);
-    info.innerHTML = 'Name: '+element[1]+'<br>Phone: '+element[2];
-    mechimg.setAttribute('src', '../img/'+element[5]);
+    info.innerHTML = 'Name: '+element.name+'<br>Phone: '+element.phone_no;
+    mechimg.setAttribute('src', '../img/'+element.imgname);
     mechimg.setAttribute('style', 'height: 50px;');
     info.setAttribute('style', 'font-size: 12px;');  
 }
 
-//Lower-right
-var Arr = new Array();
-
-xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-    var h=0;
-    var myObj = JSON.parse(this.responseText);
-    myObj.forEach(element => {
-        Arr[h] = element;
-        Arr[h].push(parseInt(distance(element[3], element[4], x=null, y=null)));
-        addBubble(Arr[h], h);
-        h++;
-    });
-    mechlist();
-    dynamicSort(6);
-}
-xmlhttp.open("POST", "../back-end/maps.php");
-xmlhttp.send();
-
-//                             ADD LOCATION + MARKER
-
-//adds marker
-function fnc_marker(location) {
-    if(!check){
-        marker = new H.map.Marker(location);   
-    }
-    marker.setGeometry(location);
-    map.addObject(marker);
-    map.setCenter(location);
-    map.setZoom(14);
-    check=1;
-    ds(location.lat, location.lng);
-}
-
-//Search Text Location
-function STL() {
-    const searchText = document.getElementById('search').value;
-    const geocoder = platform.getGeocodingService();
-    geocoder.geocode({ searchText }, result => {
-        const location = result.Response.View[0].Result[0].Location.DisplayPosition;
-        const {Latitude: lat, Longitude: lng} = location;
-        coords = {lat: lat, lng: lng};
-        fnc_marker(coords);
-    });
-}
-
-//get location by clicking on the map
-function setUpClickListener(map) {
-    map.addEventListener('tap', function (evt) {
-        var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
-        lat = Math.abs(coord.lat.toFixed(4)); 
-        lng = Math.abs(coord.lng.toFixed(4));
-        RGC(lat, lng);
-    });
-}
-
-var service = platform.getSearchService();
-var bubble, bubblex;
-function RGC(x, y) {
-    service.reverseGeocode({
-        at: ''+x+','+y+''
-    }, (result) => {
-        result.items.forEach((item) => {
-                bubble = new H.ui.InfoBubble(item.position, {
-                content: item.address.label+', lat:'+x+', lng:'+y 
-            });
-            ui.removeBubble(bubblex);
-            ui.addBubble(bubble);
-            bubblex = bubble;
-            coords = {lat: x, lng: y};
-            fnc_marker(coords);
-            map.removeObject(marker);
-            ds(x, y);
-        });
-    }, alert);
-}
-setUpClickListener(map);
-
-//automatic location using GPS
-function updatePosition (event) {
-    var HEREHQcoordinates = {
-        lat: event.coords.latitude,
-        lng: event.coords.longitude,
-    };
-    fnc_marker(HEREHQcoordinates);
-    marker.draggable = true;
-    addDraggableMarker(map, behavior);
-}
-
-//draggable marker
-function addDraggableMarker(map, behavior){
-    map.addEventListener('dragstart', function(ev) {
-        var target = ev.target,
-            pointer = ev.currentPointer;
-        if (target instanceof H.map.Marker) {
-            var targetPosition = map.geoToScreen(target.getGeometry());
-            target['offset'] = new H.math.Point(pointer.viewportX - targetPosition.x, pointer.viewportY - targetPosition.y);
-            behavior.disable();
-        }
-    }, false);
-+
-    map.addEventListener('dragend', function(ev) {
-        var target = ev.target;
-        if (target instanceof H.map.Marker) {
-            behavior.enable();
-        }
-        ds(marker.getGeometry().lat, marker.getGeometry().lng);
-    }, false);
-
-    map.addEventListener('drag', function(ev) {
-        var target = ev.target,
-        pointer = ev.currentPointer;
-        if (target instanceof H.map.Marker) {
-            target.setGeometry(map.screenToGeo(pointer.viewportX - target['offset'].x, pointer.viewportY - target['offset'].y));
-        }
-    }, false);
-}
-
-//                      OTHER FUNCTIONS
-
-//Distance
-function distance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = Math.cos;
-    var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
-    return 12742 * Math.asin(Math.sqrt(a));
-}
-
-function ds(x, y){
-    x = document.getElementById('lol').value;
-    Arr.forEach(e => {
-        e[6] = parseInt(distance(e[3], e[4], x, y));
-    });
-    dynamicSort(x);
-}
-
-function dynamicSort(x) {
-    var distn = new Array();
-    var i=0, j=0;
-    for (i = 0; i < Arr.length; i++) {
-        var j=distn.length-1;
-        while(j!=-1 && distn[j][x]>Arr[i][x]){
-            distn[j+1]=distn[j];
-            j--;
-        }
-        distn[j+1]=Arr[i];   
-    }
-    Table(distn);
-}
 
 //mechanic list 
 var dist = new Array();
-var body = document.getElementById('mech_list');
+var body0 = document.getElementById('mech_list');
 function mechlist(){
-    for(h=0; h<4 && h < Arr.length; h++){
-        element = Arr[h]; 
-        tr = document.createElement("tr");
-        td = document.createElement("td");
-            tbl = document.createElement("table");
-                tblBody = document.createElement("tbody");
-                    row = document.createElement("tr");
-                        cell = document.createElement("td");
-                            cell.setAttribute('id','img_'+h);
-                        row.appendChild(cell);
-                        cell2 = document.createElement("td");
-                            tbl2 = document.createElement("table");
-                                tblBody2 = document.createElement("tbody");
+    for(h=0; h<4 && h < myObj.length; h++){
+        tr01 = document.createElement("tr");
+        td01 = document.createElement("td");
+            tbl01 = document.createElement("table");
+                tblBody01 = document.createElement("tbody");
+                    row01 = document.createElement("tr");
+                        cell01 = document.createElement("td");
+                            cell01.setAttribute('id','img_'+h);
+                        row01.appendChild(cell01);
+                        cell11 = document.createElement("td");
+                            tbl11 = document.createElement("table");
+                                tblBody11 = document.createElement("tbody");
                                     for (let index = 0; index < 3; index++) {
-                                        row2 = document.createElement("tr");
-                                            cell21 = document.createElement("td");
-                                                cellText2 = document.createElement("p");
-                                                cellText2.setAttribute('id','mech_'+index+h);
-                                                cellText2.setAttribute('style','margin: 0px;');
-                                                cell21.appendChild(cellText2);
-                                            row2.appendChild(cell21);
-                                        tblBody2.appendChild(row2);    
+                                        row11 = document.createElement("tr");
+                                            cell12 = document.createElement("td");
+                                                cellText0 = document.createElement("p");
+                                                cellText0.setAttribute('id','mech_'+index+h);
+                                                cellText0.setAttribute('style','margin: 0px;');
+                                                cell12.appendChild(cellText0);
+                                            row11.appendChild(cell12);
+                                        tblBody11.appendChild(row11);    
                                     }
-                                tbl2.appendChild(tblBody2);
-                            cell2.appendChild(tbl2); 
-                        row.appendChild(cell2);  
-                        cellRating = document.createElement("td");
-                            button = document.createElement("input");
-                            button.setAttribute('type', 'submit');
-                            button.setAttribute('class', 'Book');
-                            button.setAttribute('onclick', 'book(this)');
-                            button.setAttribute('id', 'Book'+h);
-                            cellRating.appendChild(button);
-                            cellTextRating = document.createElement("p");
-                            cellTextRating.setAttribute('class','rating');
-                            cellTextRating.setAttribute('id','rating'+h);
-                            cellTextRating.setAttribute('style','margin: 0px;');
-                            cellRating.appendChild(cellTextRating);                
-                        row.appendChild(cellRating);        
-                    tblBody.appendChild(row);
-                tbl.appendChild(tblBody);
-            td.appendChild(tbl);
-        tr.appendChild(td);
-        body.appendChild(tr);
-        tbl.setAttribute('class','mech_list1');
-        tbl.setAttribute('id',h);
+                                tbl11.appendChild(tblBody11);
+                            cell11.appendChild(tbl11); 
+                        row01.appendChild(cell11);  
+                        cellRating0 = document.createElement("td");
+                            button0 = document.createElement("input");
+                            button0.setAttribute('type', 'submit');
+                            button0.setAttribute('class', 'Book');
+                            button0.setAttribute('onclick', 'book(this)');
+                            button0.setAttribute('id', 'Book'+h);
+                            cellRating0.appendChild(button0);
+                            cellTextRating0 = document.createElement("p");
+                            cellTextRating0.setAttribute('class','rating');
+                            cellTextRating0.setAttribute('id','rating'+h);
+                            cellTextRating0.setAttribute('style','margin: 0px;');
+                            cellRating0.appendChild(cellTextRating0);                
+                        row01.appendChild(cellRating0);        
+                    tblBody01.appendChild(row01);
+                tbl01.appendChild(tblBody01);
+            td01.appendChild(tbl01);
+        tr01.appendChild(td01);
+        body0.appendChild(tr01);
+        tbl01.setAttribute('class','mech_list1');
+        tbl01.setAttribute('id',h);
     };
+    Table(myObj);
 }
 
-function Table(distn) {
-    var h=0;
-    while (h<4 && h<distn.length ) {
-        document.getElementById('img_'+h).innerHTML = '<img src="../img/'+distn[h][5]+'" height="60px" width="60px">';
-        document.getElementById('mech_0'+h).innerHTML = 'Name: '+distn[h][1];
-        document.getElementById('mech_1'+h).innerHTML = 'Phone: '+distn[h][2];
-        if(distn[h][6]=='NaN'){
-            document.getElementById('mech_2'+h).innerHTML = 'Distance: Enter location';
-        }else{
-            document.getElementById('mech_2'+h).innerHTML = 'Distance: '+distn[h][6]+'km';
-        }
-        document.getElementById('Book'+h).value = 'Book';
-        document.getElementById('Book'+h).name = distn[h][0];
-        document.getElementById('rating'+h).innerHTML = 'NR';
-        h++;
-    }
+function m_stat() {
+    m_body = document.getElementById('stat');
+    strong = document.createElement('strong');
+        table = document.createElement('table');
+            row = document.createElement('tr');
+                cell = document.createElement('td');
+                    tbl = document.createElement('table');
+                        rw1 = document.createElement('tr');
+                            cl1 = document.createElement('td');
+                                cl1.setAttribute('id', 'cname');
+                            rw1.appendChild(cl1);
+                        tbl.appendChild(rw1);
+                        rw2 = document.createElement('tr');
+                            cl2 = document.createElement('td');
+                                cl2.setAttribute('id', 'cphone');
+                            rw2.appendChild(cl2);
+                        tbl.appendChild(rw2);
+                        rw3 = document.createElement('tr');
+                            cl3 = document.createElement('td');
+                                cl3.setAttribute('id', 'Loc_M');
+                            rw3.appendChild(cl3);
+                        tbl.appendChild(rw3);
+                    cell.appendChild(tbl);
+                row.appendChild(cell);
+                td2 = document.createElement('td');
+                        stat = document.createElement('p');
+                            stat.setAttribute('id', 'statp');
+                        td2.appendChild(stat);
+                        button1 = document.createElement('button');
+                            button1.setAttribute('id', 'Accepted');
+                            button1.setAttribute('class', 'Book');
+                        td2.appendChild(button1);
+                        button2 = document.createElement('button');
+                            button2.setAttribute('id', 'Rejected');
+                            button2.setAttribute('class', 'Book');
+                        td2.appendChild(button2);
+                    td2.setAttribute('id','stat_right')
+                    row.appendChild(td2);
+                row.appendChild(td2);  
+            table.appendChild(row);
+        table.setAttribute('class', 'notify');
+        table.setAttribute('id', 'm_tab');
+        strong.appendChild(table);    
+    m_body.appendChild(strong);
+    button1.setAttribute('onclick', 'task(this.id);');
+    button2.setAttribute('onclick', 'task(this.id);');
+    document.getElementById('Accepted').innerHTML = 'ACCEPT';
+    document.getElementById('Rejected').innerHTML = 'REJECT';
 }
+/*
+function no_notify() {
+    body = document.getElementById('stat');
+        p = document.createElement('p');
+        p.setAttribute('id', 'no_noti');
+        p.setAttribute('class', 'notify');
+        body.appendChild(p);
+    document.getElementById('no_noti').innerHTML = 'No Notification';
+}
+*/
+function c_stat() {
+    c_body = document.getElementById('stat');
+        strong = document.createElement('strong');
+            table = document.createElement('table');
+                row = document.createElement('tr');
+                    cell = document.createElement('td');
+                        tbl = document.createElement('table');
+                            rw1 = document.createElement('tr');
+                                cl1 = document.createElement('td');
+                                    cl1.setAttribute('id', 'mech_name');
+                                rw1.appendChild(cl1);
+                            tbl.appendChild(rw1);
+                            rw2 = document.createElement('tr');
+                                cl2 = document.createElement('td');
+                                    cl2.setAttribute('id', 'Dist_C');
+                                rw2.appendChild(cl2);
+                            tbl.appendChild(rw2);
+                            rw3 = document.createElement('tr');
+                                cl3 = document.createElement('td');
+                                    cl3.setAttribute('id', 'Loc_C');
+                                rw3.appendChild(cl3);
+                            tbl.appendChild(rw3);
+                        cell.setAttribute('id', 'det_left');
+                        cell.appendChild(tbl);
+                    row.appendChild(cell);
+                    td2 = document.createElement('td');
+                        stat = document.createElement('p');
+                            stat.setAttribute('id', 'statp');
+                        td2.appendChild(stat);
+                        br = document.createElement('br');
+                        td2.appendChild(br);
+                        button = document.createElement('button');
+                            button.setAttribute('id', 'Cancelled');
+                            button.setAttribute('class', 'Book');
+                        td2.appendChild(button);
+                    td2.setAttribute('id','stat_right')
+                    row.appendChild(td2);
+                table.appendChild(row);
+            table.setAttribute('class', 'notify');
+            table.setAttribute('id', 'c_tab');
+            strong.appendChild(table); 
+        c_body.appendChild(strong);
+    button.setAttribute('onclick', 'task(this.id);');
+    document.getElementById('Cancelled').innerHTML = 'CANCEL';
+}
+c_stat();

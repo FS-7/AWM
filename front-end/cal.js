@@ -1,107 +1,98 @@
-var C_Arr = new Array();
-var h=0;
-
-xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-    //console.log(this.responseText);
-    var myObj = JSON.parse(this.responseText);
-    myObj.forEach(element => {
-        C_Arr[h] = element;
-        loc(element[4], element[5], h);
+function Table(Table) {
+    var h=0;
+    while (h<4 && h<Table.length ) {
+        document.getElementById('img_'+h).innerHTML = '<img src="../img/'+Table[h].imgname+'" height="60px" width="60px">';
+        document.getElementById('mech_0'+h).innerHTML = 'Name: '+Table[h].name;
+        document.getElementById('mech_1'+h).innerHTML = 'Phone: '+Table[h].phone_no;
+        if(Table[h].dist==undefined || Table[h].dist==null){
+            document.getElementById('mech_2'+h).innerHTML = 'Distance: Enter location';
+        }else{
+            document.getElementById('mech_2'+h).innerHTML = 'Distance: '+Table[h].dist+'km';
+        }
+        document.getElementById('Book'+h).value = 'Book';
+        document.getElementById('Book'+h).name = Table[h].id_no;
+        document.getElementById('rating'+h).innerHTML = 'NR';
         h++;
-    });
-}
-xmlhttp.open("POST", "../back-end/cal.php");
-xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-xmlhttp.send('id=301');
-
-var add;
-function loc(x, y, h) {
-    service.reverseGeocode({
-        at: ''+x+','+y+''
-    }, (result) => {
-        add = result.items[0].title;
-        C_Arr[h].push(add);
-    }, alert);
+    }
 }
 
-function notify() {
-    body = document.getElementById('status');
-    tr = document.createElement('tr');
-        td = document.createElement('td');
-            strong = document.createElement('strong');
-                table = document.createElement('table');
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'cname');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'cphone');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'Location');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                strong.appendChild(table);
-            td.appendChild(strong);
-        tr.appendChild(td);
-        td2 = document.createElement('td');
-            button1 = document.createElement('button');
-                button1.setAttribute('id', 'acc');
-            td2.appendChild(button1);
-            button2 = document.createElement('button');
-                button2.setAttribute('id', 'rej');
-            td2.appendChild(button2);
-            td2.setAttribute('id','stat_right')
-        tr.appendChild(td2);
-    body.appendChild(tr);
-    document.getElementById('acc').innerHTML = 'ACCEPT';
-    document.getElementById('rej').innerHTML = 'REJECT';
+function cust_status(C_Arr){
+    document.getElementById('mech_name').innerHTML = 'Name: '+C_Arr[0].name;
+    document.getElementById('Dist_C').innerHTML = 'Distance: '+C_Arr[0].dist;
+    document.getElementById('Loc_C').innerHTML = 'Location: '+C_Arr[0].location;
+    document.getElementById('statp').innerHTML = C_Arr[0].status;
 }
-//notify();
 
-function c_stat() {
-    body = document.getElementById('status');
-    tr = document.createElement('tr');
-        td = document.createElement('td');
-            strong = document.createElement('strong');
-                table = document.createElement('table');
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'mech_name');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'Distance');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                    row = document.createElement('tr');
-                        cell = document.createElement('td');
-                            cell.setAttribute('id', 'Location');
-                        row.appendChild(cell);
-                    table.appendChild(row);
-                strong.appendChild(table);
-            td.appendChild(strong);
-        tr.appendChild(td);
-        td2 = document.createElement('td');
-            button2 = document.createElement('button');
-                button2.setAttribute('id', 'cancel');
-            td2.appendChild(button2);
-            td2.setAttribute('id','stat_right')
-        tr.appendChild(td2);
-    body.appendChild(tr);
-    document.getElementById('cancel').innerHTML = 'CANCEL';
+function mech_stat(){
+    document.getElementById('cname').innerHTML = 'Name: '+C_Arr[0].name;
+    document.getElementById('cphone').innerHTML = 'Distance: '+C_Arr[0].dist;
+    document.getElementById('Loc_M').innerHTML = 'Location: '+C_Arr[0].request_id;
+    document.getElementById('statp').innerHTML = C_Arr[0].status;
 }
-c_stat();
 
-function service(){
-
+var top1='c_tab'
+function update(){
+    var dom_old = document.getElementById(top1).style;
+    if(0){
+        var dom_new = document.getElementById('no_nofi').style;
+        dom_old.zIndex='0';
+        dom_new.zIndex='10';
+        dom_old.visibility='hidden';
+        dom_new.visibility='visible';
+        top='no_noti';
+    }
+    else{
+        if(1){
+            var dom_new = document.getElementById('c_tab').style;
+            dom_old.zIndex='0';
+            dom_new.zIndex='10';
+            dom_old.visibility='hidden';
+            dom_new.visibility='visible';
+            top='c_tab';
+            cust_status();
+        }
+        else{
+            var dom_new = document.getElementById('m_tab').style;
+            dom_old.zIndex='0';
+            dom_new.zIndex='10';
+            dom_old.visibility='hidden';
+            dom_new.visibility='visible';
+            top='m_tab';
+        }
+    }
 }
+update();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var lat_s=0, lat_d=0, lng_s=0, lng_d=0;
 //routing

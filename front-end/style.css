@@ -57,7 +57,8 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #fff; }
+  background-color: #ccc;
+}
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -8138,7 +8139,10 @@ body {
   line-height: 1.8;
   font-weight: normal;
   background: #f8f9fd;
-  color: gray; }
+  color: gray;  
+  background-image: url('../img/back2.jpg');
+  background-size: cover;
+}
 
 a {
   -webkit-transition: .3s all ease;
@@ -8172,7 +8176,7 @@ h1, h2, h3, h4, h5,
 
 .heading-section {
   font-size: 28px;
-  color: #000; }
+  color: #fff; }
 
 .img {
   background-size: cover;
@@ -8201,7 +8205,7 @@ h1, h2, h3, h4, h5,
   background: -ms-linear-gradient(-45deg, #f75959 0%, #f35587 100%);
   background: -webkit-linear-gradient(315deg, #f75959 0%, #f35587 100%);
   background: -o-linear-gradient(315deg, #f75959 0%, #f35587 100%);
-  background: linear-gradient(135deg, #f75959 0%, #f35587 100%);
+  background: linear-gradient(to bottom right, rgba(68, 100, 197, 0.7) 0%, rgb(189, 78, 107) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f75959', endColorstr='#f35587', GradientType=1 );
   color: #fff; }
   .text-wrap .text h2 {
@@ -8360,7 +8364,7 @@ h1, h2, h3, h4, h5,
     background: -ms-linear-gradient(-45deg, #f75959 0%, #f35587 100%);
     background: -webkit-linear-gradient(315deg, #f75959 0%, #f35587 100%);
     background: -o-linear-gradient(315deg, #f75959 0%, #f35587 100%);
-    background: linear-gradient(135deg, #f75959 0%, #f35587 100%);
+    background: linear-gradient(to right, rgba(68, 100, 197, 0.7) 0%, rgb(189, 78, 107) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f75959', endColorstr='#f35587', GradientType=1 ); }
     .btn.btn-primary:hover {
       border: 1px solid #f35588;

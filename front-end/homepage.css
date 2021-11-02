@@ -152,14 +152,13 @@ body{
 }
 
 .upper-right{
-    height: 50%;
+    height: 100%;
     width: 39%;
     margin: 0px;
     padding: 0px;
     border: none;
     display: block;
     float: right;
-    transform: translateY(50%);
 }
 
 .lower-left{
@@ -240,11 +239,30 @@ select#lol{
 }
 
 #status{
-    height: 100%;
+    height: 75%;
     width: 80%;
     border: 1px solid black;
     margin: 3px;
     color: white;
+    transform: translateY(20%);
+    background: linear-gradient(to bottom right, rgba(49, 69, 128, 0.7) 0%, rgba(126, 56, 75, 1) 100%);
+}
+
+.notify{
+    display: block;
+    position: static;
+}
+
+#c_tab, #m_tab{
+    z-index: 0;
+    visibility: hidden;
+    margin: 0px;
+}
+
+#no_noti{
+    z-index: 10;
+    visibility: visible;
+    margin: 0px;
 }
 
 .upper-right p{
@@ -253,9 +271,13 @@ select#lol{
     font-family: Lucida Bright;
 }
 
+#det_left{
+    width: 78%;
+}
+
 #status button{
     width: 60px;
-    float: left;
+    float: right;
     color: black;
     text-align: center;
     padding: 0px 4px;
@@ -272,6 +294,22 @@ select#lol{
     color: white;
 }
 
+#stat{
+    height: 70%;
+    width: 100%;
+}
+
 #stat_right{
-    width: 125px;
+    height: 100%;
+    width: 40%;
+}
+
+#stat_right button, #stat_right p{
+    text-align: center;
+    float: right;
+    margin: 1px 10px;
+}
+
+#Accepted{
+    background-color: green  !important;
 }

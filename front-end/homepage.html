@@ -11,14 +11,12 @@
         <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
         <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-        <script src='../ser.js'></script>
     </head>
     <body>
         <center>
             <div class='main'>
                 <div class="header">
                     <div class="logo">
-                        <!--logo-->
                         <a href="#default" class="logo"> 
                             <div class='img'>
                                 <img src="../img/awm.jpg" height='60px' width="60px">
@@ -26,22 +24,19 @@
                         </a>
                     </div>
                     <div class="header-right">
-                        <!--buttons-->
                         <a href="">Home</a>
-                        <a href="">Contact</a>
-                        <a href="">About</a>
                         <a href="">Feedback</a>
+                        <a href="">Contact</a>
+                        <a>Logout</a>
                     </div>
                 </div>
                 <form action="../back-end/homepage.php" method="POST"></form>
-                <!--body-->
                 <div class="body">
                     <div class="upper">
                         <div class="upper-left"> 
-                            <!--search bar-->
                             <label class='txtlabel'>Find Mechanic</label>
                             <input type="text" name="search" placeholder=" Search.." id="search" onsubmit="STL();" required/>
-                            <button type="button" onclick=navigator.geolocation.getCurrentPosition(updatePosition); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
+                            <button type="button" onclick=navigator.geolocation.getCurrentPosition(GPS); placeholder="Automatically Locate"><i class="fa fa-map-marker"></i></button>
                             <button type="submit" onclick=STL();><i class="fa fa-search"></i></button>
                         </div>
         
@@ -50,25 +45,26 @@
                                 <tr>
                                     <td><strong>Status: </strong></td>
                                 </tr>
+                                <tr>
+                                    <td><div id="stat"></div></td>
+                                </tr>
                             </table>
                         </div>
-                        <script src="cal.js"></script>
                     </div>
                     <div class="lower">
-                        <!--MAPS-->
                         <div class="lower-left" id="map"></div>
-                        
-                        <!--mechanic list-->
                         <div class="lower-right" placeholder="list"><br>
                         <p id="list"><strong>SORT BY: </strong> </p>
-                            <select style="float: left;" id='lol' onchange="dynamicSort(parseInt(value));">
-                                <option value="1">Name</option>
-                                <option value="6" selected>Distance</option> 
+                            <select style="float: left;" id='lol' onchange="dynamicSort(value);">
+                                <option value="name">Name</option>
+                                <option value="dist" selected>Distance</option> 
                             </select>
                         <table class='mec_list' id='mech_list'></table>
                         <script src='maps.js'></script>
                         </div>
                     </div>     
+                    <script src="cal.js"></script>
+                    <script src='service.js'></script>
                 </div>
             </div>
         </center>
