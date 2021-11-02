@@ -51,7 +51,7 @@ if(isset($_SESSION['id']) && isset($_SESSION['type'])){
                                     <td><strong>Status: </strong></td>
                                 </tr>
                                 <tr>
-                                    <td><div id="stat"></div></td>
+                                    <td><div id="stat"><p id='temp'>No Notifications<p></div></td>
                                 </tr>
                             </table>
                         </div>

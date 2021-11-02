@@ -21,48 +21,17 @@ function Table(Table) {
 function cust_status(C_Arr){
     document.getElementById('mech_name').innerHTML = 'Name: '+C_Arr[0].name;
     document.getElementById('Dist_C').innerHTML = 'Distance: '+C_Arr[0].dist;
-    document.getElementById('Loc_C').innerHTML = 'Location: '+C_Arr[0].location;
+    document.getElementById('Ph_M').innerHTML = 'Phone: '+C_Arr[0].phone_no;
     document.getElementById('statp').innerHTML = C_Arr[0].status;
 }
 
 function mech_stat(){
-    document.getElementById('cname').innerHTML = 'Name: '+C_Arr[0].name;
-    document.getElementById('cphone').innerHTML = 'Distance: '+C_Arr[0].dist;
-    document.getElementById('Loc_M').innerHTML = 'Location: '+C_Arr[0].request_id;
-    document.getElementById('statp').innerHTML = C_Arr[0].status;
+    document.getElementById('cname').innerHTML = 'Name: '+C_Arr['0'].name;
+    document.getElementById('cphone').innerHTML = 'Distance: '+C_Arr['0'].dist;
+    document.getElementById('Ph_C').innerHTML = 'Phone No: '+C_Arr['0'].phone_no;
+    document.getElementById('statp').innerHTML = C_Arr['0'].status;
 }
 
-function update(){
-    var dom_old = document.getElementById(top1).style;
-    if(0){
-        var dom_new = document.getElementById('no_nofi').style;
-        dom_old.zIndex='0';
-        dom_new.zIndex='10';
-        dom_old.visibility='hidden';
-        dom_new.visibility='visible';
-        top='no_noti';
-    }
-    else{
-        if(1){
-            var dom_new = document.getElementById('c_tab').style;
-            dom_old.zIndex='0';
-            dom_new.zIndex='10';
-            dom_old.visibility='hidden';
-            dom_new.visibility='visible';
-            top='c_tab';
-            //cust_status();
-        }
-        else{
-            var dom_new = document.getElementById('m_tab').style;
-            dom_old.zIndex='0';
-            dom_new.zIndex='10';
-            dom_old.visibility='hidden';
-            dom_new.visibility='visible';
-            top='m_tab';
-        }
-    }
-}
-//update();
 
 
 

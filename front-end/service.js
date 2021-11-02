@@ -137,15 +137,12 @@ function dynamicSort(x) {
     Table(dst);
 }
 
-let add;
 function loc(x, y) {
     service.reverseGeocode({
         at: ''+x+','+y+''
     }, (result) => {
-         add = result.items[0].title;
-        console.log(add);
+        add = result.items[0].title;
     }, alert);
-    //console.log(add);
 }
 
 // DB VALUES
@@ -156,7 +153,6 @@ function book(book) {
     }else{
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function() {
-            console.log(this.responseText);
             alert('Booked');
         }
         xmlhttp.open("POST", "../back-end/cal.php");
@@ -166,10 +162,9 @@ function book(book) {
 }
 
 function task(task) {
-    console.log(task);
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function () {
-        init();
+        init2();
     }
     xmlhttp.open("POST", "../back-end/cal.php");
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

@@ -7,4 +7,5 @@ while ($row = mysqli_fetch_array($q, MYSQLI_ASSOC)){
     $arr[] = $row;
 }
 echo json_encode($arr);
+mysqli_close($conn);
 ?>

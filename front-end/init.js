@@ -1,7 +1,7 @@
 //                  INITIALIZATION
 
 //Maps
-var marker, myObj, C_Arr, myObjx, h, top1='c_tab';
+var marker, myObj, C_Arr=new Array(), myObjx, h, top1='c_tab';
 var dist = new Array();
 var body0 = document.getElementById('mech_list');
 
@@ -38,14 +38,16 @@ function init2() {
     xmlhttp.onload = function() {
         myObjx = JSON.parse(this.responseText);
         C_Arr= Object.create(myObjx);
-        var Arr_loc = new Array();
         for (h = 0; h < myObjx.length; h++) {
-            C_Arr[h].dist = parseInt(distance(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng));//Arr_loc[0];
-            C_Arr[h].loc = loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon);
+            C_Arr[h].dist = parseInt(distance(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng));
         }
-        //console.log(C_Arr[h].loc);
-        c_stat();
-        cust_status(C_Arr);
+        if(C_Arr.length){
+            if(!C_Arr['0']){
+                c_stat();
+            }else{
+                m_stat();
+            }
+        }
     }
     xmlhttp.open("POST", "../back-end/cal.php");
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -131,6 +133,7 @@ function mechlist(){
 //          UPPER-RIGHT TABLE, STATUS
 function m_stat() {
     m_body = document.getElementById('stat');
+    m_body.removeChild(document.getElementById('temp'));
     strong = document.createElement('strong');
         table = document.createElement('table');
             row = document.createElement('tr');
@@ -148,7 +151,7 @@ function m_stat() {
                         tbl.appendChild(rw2);
                         rw3 = document.createElement('tr');
                             cl3 = document.createElement('td');
-                                cl3.setAttribute('id', 'Loc_M');
+                                cl3.setAttribute('id', 'Ph_C');
                             rw3.appendChild(cl3);
                         tbl.appendChild(rw3);
                     cell.appendChild(tbl);
@@ -177,10 +180,12 @@ function m_stat() {
     button2.setAttribute('onclick', 'task(this.id);');
     document.getElementById('Accepted').innerHTML = 'ACCEPT';
     document.getElementById('Rejected').innerHTML = 'REJECT';
+    mech_stat(C_Arr);
 }
 
 function c_stat() {
     c_body = document.getElementById('stat');
+    c_body.removeChild(document.getElementById('temp'));
         strong = document.createElement('strong');
             table = document.createElement('table');
                 row = document.createElement('tr');
@@ -198,7 +203,7 @@ function c_stat() {
                             tbl.appendChild(rw2);
                             rw3 = document.createElement('tr');
                                 cl3 = document.createElement('td');
-                                    cl3.setAttribute('id', 'Loc_C');
+                                    cl3.setAttribute('id', 'Ph_M');
                                 rw3.appendChild(cl3);
                             tbl.appendChild(rw3);
                         cell.setAttribute('id', 'det_left');
