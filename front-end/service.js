@@ -137,14 +137,15 @@ function dynamicSort(x) {
     Table(dst);
 }
 
-var addx;
+let add;
 function loc(x, y) {
     service.reverseGeocode({
         at: ''+x+','+y+''
     }, (result) => {
-        add = result.items[0].title;
-        console.log(this.add);
+         add = result.items[0].title;
+        console.log(add);
     }, alert);
+    //console.log(add);
 }
 
 // DB VALUES

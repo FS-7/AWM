@@ -41,8 +41,9 @@ function init2() {
         var Arr_loc = new Array();
         for (h = 0; h < myObjx.length; h++) {
             C_Arr[h].dist = parseInt(distance(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng));//Arr_loc[0];
-            C_Arr[h].loc = addx;//loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon);
+            C_Arr[h].loc = loc(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon);
         }
+        //console.log(C_Arr[h].loc);
         c_stat();
         cust_status(C_Arr);
     }
