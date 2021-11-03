@@ -1,14 +1,17 @@
 //                     ADD LOCATION + MARKER
 
-//adds marker
 var service = platform.getSearchService();
 var temp = new Array(), completelynew = new Array() ;
 var marker, bubble, bubblex;
+
+//adds marker
+
 function fnc_marker(location) {
     marker = new H.map.Marker(location);
     map.addObject(marker);
     map.setCenter(location);
-    //map.setZoom(14);
+    map.setZoom(12);
+    marker.setVisibility(true);
     check=1;
     ds(location.lat, location.lng);
     return marker;
@@ -54,7 +57,7 @@ function RGC(x, y) {
                 map.removeObject(marker);
             }
             marker = fnc_marker({lat: x, lng: y});
-            map.removeObject(marker);
+            marker.setVisibility(false);
         });
     }, alert);
 }
@@ -138,11 +141,10 @@ function dynamicSort(x) {
 }
 
 function loc(x, y) {
-    service.reverseGeocode({
-        at: ''+x+','+y+''
-    }, (result) => {
+    service.reverseGeocode({at: ''+x+','+y+''},(result) => {
         add = result.items[0].title;
-    }, alert);
+        this.document.getElementById('Loc').innerHTML = 'Location: '+add;
+    });
 }
 
 // DB VALUES
@@ -154,6 +156,7 @@ function book(book) {
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function() {
             alert('Booked');
+            location.reload();
         }
         xmlhttp.open("POST", "../back-end/cal.php");
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -161,13 +164,12 @@ function book(book) {
     }
 }
 
-function task(task) {
+function task(task, val) {
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function () {
-        init2();
+        location.reload();
     }
     xmlhttp.open("POST", "../back-end/cal.php");
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("func="+task+"&request_id="+C_Arr[0].request_id);
-    
+    xmlhttp.send("func="+task+"&request_id="+val.request_id);
 }

@@ -25,9 +25,9 @@ class m_stat{
         $arr = array();
         $id = $_SESSION['id'];
         $conn = mysqli_connect("localhost", "root", "", "awm");
-        $q = mysqli_query($conn, "SELECT request_id, customer.name, customer.phone_no, c_loc_lat, c_loc_lon, gar_loc_lat, gar_loc_lng, status FROM service_log, customer, mechanic WHERE m_id='$id' AND mechanic.id_no=service_log.m_id AND customer.id_no=service_log.c_id AND service_log.status='Waiting' ORDER BY service_log.date DESC");
+        $q = mysqli_query($conn, "SELECT request_id, customer.name, customer.phone_no, c_loc_lat, c_loc_lon, gar_loc_lat, gar_loc_lng, status FROM service_log, customer, mechanic WHERE m_id='$id' AND mechanic.id_no=service_log.m_id AND customer.id_no=service_log.c_id AND service_log.status='Waiting' ORDER BY service_log.date ASC");
         while ($row = mysqli_fetch_array($q, MYSQLI_ASSOC)){
-            $arr['0'] = $row; 
+            $arr['m'] = $row; 
         }
         echo json_encode($arr);
         mysqli_close($conn);
@@ -39,9 +39,9 @@ class c_stat{
         $arr = array();
         $id = $_SESSION['id'];
         $conn = mysqli_connect("localhost", "root", "", "awm");
-        $q = mysqli_query($conn, "SELECT request_id, mechanic.name, mechanic.phone_no, c_loc_lat, c_loc_lon, gar_loc_lat, gar_loc_lng, status FROM service_log, mechanic WHERE c_id='$id' AND mechanic.id_no=service_log.m_id AND service_log.status='Waiting' ORDER BY service_log.date DESC");
+        $q = mysqli_query($conn, "SELECT request_id, mechanic.name, mechanic.phone_no, c_loc_lat, c_loc_lon, gar_loc_lat, gar_loc_lng, status FROM service_log, mechanic WHERE c_id='$id' AND mechanic.id_no=service_log.m_id AND (service_log.status='Accepted' OR service_log.status='Waiting') ORDER BY service_log.date ASC");
         while ($row = mysqli_fetch_array($q, MYSQLI_ASSOC)){
-            $arr[0] = $row; 
+            $arr['c'] = $row; 
         }
         echo json_encode($arr);
         mysqli_close($conn);
@@ -51,7 +51,6 @@ class c_stat{
 class book{
     public function __construct() {
         $cid = $_SESSION['id'];
-        $type = $_SESSION['type'];
         $mid= $_POST['mid'];
         $lat= $_POST['lat'];
         $lng= $_POST['lng'];

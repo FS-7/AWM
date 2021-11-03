@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="homepage.css">
+    <title>History</title>
+</head>
+<body>
+    <center>
+        <div class='main'>
+            <strong>
+                <table id="hist" border="1px solid black">
+                    <tr>
+                        <td>Name</td>
+                        <td>Date</td>
+                        <td>Status</td>
+                    </tr>
+                </table>
+            </strong>
+        </div>
+    </center>
+    <script>
+        var x = document.getElementById('hist');
+        function hist() {
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onload = function () {
+                Obj = JSON.parse(this.responseText);
+                Obj.forEach(element => {
+                    addelement(element);
+                });
+            }
+            xmlhttp.open("POST", "../back-end/history.php");
+            xmlhttp.send();
+        }
+
+        function addelement(element){
+            tbody = document.createElement('tbody');
+                row = document.createElement('tr');
+                    cell1 = document.createElement('td');
+                    cell1.innerHTML = element.name;
+                    row.appendChild(cell1);
+                    cell2 = document.createElement('td');
+                    cell2.innerHTML = element.date;
+                    row.appendChild(cell2);
+                    cell3 = document.createElement('td');
+                    cell3.innerHTML = element.status;
+                    row.appendChild(cell3);
+                tbody.appendChild(row);
+            x.appendChild(tbody);
+        }
+        hist();
+    </script>
+</body>
+</html>

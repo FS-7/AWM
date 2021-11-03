@@ -41,12 +41,10 @@ function init2() {
         for (h = 0; h < myObjx.length; h++) {
             C_Arr[h].dist = parseInt(distance(C_Arr[h].c_loc_lat, C_Arr[h].c_loc_lon, C_Arr[h].gar_loc_lat, C_Arr[h].gar_loc_lng));
         }
-        if(C_Arr.length){
-            if(!C_Arr['0']){
-                c_stat();
-            }else{
-                m_stat();
-            }
+        if (C_Arr['c']) {
+            c_stat();       
+        }else if(C_Arr['m']){
+            m_stat();
         }
     }
     xmlhttp.open("POST", "../back-end/cal.php");
@@ -133,7 +131,9 @@ function mechlist(){
 //          UPPER-RIGHT TABLE, STATUS
 function m_stat() {
     m_body = document.getElementById('stat');
-    m_body.removeChild(document.getElementById('temp'));
+    if(document.getElementById('temp')){
+        m_body.removeChild(document.getElementById('temp'));
+    }
     strong = document.createElement('strong');
         table = document.createElement('table');
             row = document.createElement('tr');
@@ -141,17 +141,17 @@ function m_stat() {
                     tbl = document.createElement('table');
                         rw1 = document.createElement('tr');
                             cl1 = document.createElement('td');
-                                cl1.setAttribute('id', 'cname');
+                                cl1.setAttribute('id', 'name');
                             rw1.appendChild(cl1);
                         tbl.appendChild(rw1);
                         rw2 = document.createElement('tr');
                             cl2 = document.createElement('td');
-                                cl2.setAttribute('id', 'cphone');
+                                cl2.setAttribute('id', 'ph');
                             rw2.appendChild(cl2);
                         tbl.appendChild(rw2);
                         rw3 = document.createElement('tr');
                             cl3 = document.createElement('td');
-                                cl3.setAttribute('id', 'Ph_C');
+                                cl3.setAttribute('id', 'Loc');
                             rw3.appendChild(cl3);
                         tbl.appendChild(rw3);
                     cell.appendChild(tbl);
@@ -176,16 +176,18 @@ function m_stat() {
         table.setAttribute('id', 'm_tab');
         strong.appendChild(table);    
     m_body.appendChild(strong);
-    button1.setAttribute('onclick', 'task(this.id);');
-    button2.setAttribute('onclick', 'task(this.id);');
+    button1.setAttribute('onclick', 'task(this.id, C_Arr["m"]);');
+    button2.setAttribute('onclick', 'task(this.id, C_Arr["m"]);');
     document.getElementById('Accepted').innerHTML = 'ACCEPT';
     document.getElementById('Rejected').innerHTML = 'REJECT';
-    mech_stat(C_Arr);
+    stat_up(C_Arr['m']);
 }
 
 function c_stat() {
     c_body = document.getElementById('stat');
-    c_body.removeChild(document.getElementById('temp'));
+    if(document.getElementById('temp')){
+        c_body.removeChild(document.getElementById('temp'));
+    }
         strong = document.createElement('strong');
             table = document.createElement('table');
                 row = document.createElement('tr');
@@ -193,17 +195,17 @@ function c_stat() {
                         tbl = document.createElement('table');
                             rw1 = document.createElement('tr');
                                 cl1 = document.createElement('td');
-                                    cl1.setAttribute('id', 'mech_name');
+                                    cl1.setAttribute('id', 'name');
                                 rw1.appendChild(cl1);
                             tbl.appendChild(rw1);
                             rw2 = document.createElement('tr');
                                 cl2 = document.createElement('td');
-                                    cl2.setAttribute('id', 'Dist_C');
+                                    cl2.setAttribute('id', 'ph');
                                 rw2.appendChild(cl2);
                             tbl.appendChild(rw2);
                             rw3 = document.createElement('tr');
                                 cl3 = document.createElement('td');
-                                    cl3.setAttribute('id', 'Ph_M');
+                                    cl3.setAttribute('id', 'Loc');
                                 rw3.appendChild(cl3);
                             tbl.appendChild(rw3);
                         cell.setAttribute('id', 'det_left');
@@ -226,7 +228,7 @@ function c_stat() {
             table.setAttribute('id', 'c_tab');
             strong.appendChild(table); 
         c_body.appendChild(strong);
-    button.setAttribute('onclick', 'task(this.id);');
+    button.setAttribute('onclick', 'task(this.id, C_Arr["c"]);');
     document.getElementById('Cancelled').innerHTML = 'CANCEL';
-    cust_status(C_Arr);
+    stat_up(C_Arr['c']);
 }

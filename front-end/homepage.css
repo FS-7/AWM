@@ -308,4 +308,11 @@ select#lol{
     background-color: green  !important;
 }
 
+#hist{
+    transform: translateY(50%);
+}
 
+#hist tbody tr td{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
