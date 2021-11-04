@@ -6,8 +6,8 @@ if(isset($email))
 	{
 	$conn = mysqli_connect("localhost", "root", "", "awm");
 	$result=mysqli_query($conn,"SELECT id_no, email_id, password from mechanic where email_id='$email'");
-	//$ver = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	//if($ver['email_id'] == $email){
+	$temp = mysqli_num_rows($result);
+	if($temp>0){
 		while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 			if($row['password']!=$password){
 				?>
@@ -26,9 +26,9 @@ if(isset($email))
 				<?php
 			}
 		}
-	//}else{
-		//echo '<script>window.location.assign("../index.html"); alert("Login Failed, Please Re-enter Email and Password");</script>';
-	//}
+	}else{
+		echo '<script>window.location.assign("../index.html"); alert("Login Failed, Please Re-enter Email and Password");</script>';
+	}
 }
 mysqli_close($conn);
 ?>
