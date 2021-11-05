@@ -30,7 +30,7 @@ if(isset($_SESSION['id']) && isset($_SESSION['type'])){
                     </div>
                     <div class="header-right">
                         <a href="history.html">History</a>
-                        <a href="">Feedback</a>
+                        <a href="feedback.php">Feedback</a>
                         <a href="">Contact</a>
                         <a href="../back-end/logout.php">Logout</a>
                     </div>
