@@ -28,9 +28,14 @@ if(isset($_SESSION['id']) && isset($_SESSION['type'])){
                             </div><p style="padding: 0px 10px; margin: 0px auto; float: left; transform: translateY(50%);">ANY WHERE MECHANIC</p> 
                         </a>
                     </div>
-                    <div class="header-right">
+                    <div class="header-right" id="header-right">
                         <a href="history.html">History</a>
-                        <a href="feedback.php">Feedback</a>
+                        <?php 
+                        if($_SESSION['type']=='customer'){
+                        echo "<script>var x = document.getElementById('header-right');";
+                        echo "a = document.createElement('a'); a.setAttribute('href', 'feedback.php'); a.innerHTML = 'Feedback'; x.appendChild(a);</script>";
+                        }
+                        ?>
                         <a href="">Contact</a>
                         <a href="../back-end/logout.php">Logout</a>
                     </div>
@@ -75,7 +80,7 @@ if(isset($_SESSION['id']) && isset($_SESSION['type'])){
         </center>
     </body>
 </html>
-<?php 
+<?php
 }
 else{
     echo "<script>alert('Please Login');window.location.assign('../index.html');</script>";
