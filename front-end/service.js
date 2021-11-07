@@ -155,8 +155,12 @@ function book(book) {
     }else{
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function() {
-            alert('Booked');
-            location.reload();
+            if(this.responseText){
+                alert('Booked');
+                location.reload();
+            }else{
+                alert('Customer Invalid, Please login as customer');
+            }
         }
         xmlhttp.open("POST", "../back-end/cal.php");
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
