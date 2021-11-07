@@ -308,6 +308,10 @@ select#lol{
     background-color: green  !important;
 }
 
+#Completed{
+    background-color: green  !important;
+}
+
 #hist{
     transform: translateY(50%);
 }

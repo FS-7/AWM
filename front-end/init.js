@@ -217,6 +217,13 @@ function c_stat() {
                         td2.appendChild(stat);
                         br = document.createElement('br');
                         td2.appendChild(br);
+                        if(C_Arr['c'].status=='Accepted'){
+                            button2 = document.createElement('button');
+                                button2.setAttribute('id', 'Completed');
+                                button2.setAttribute('class', 'Book');
+                            td2.appendChild(button2);
+                            button2.setAttribute('onclick', 'task(this.id, C_Arr["c"]);');
+                        }
                         button = document.createElement('button');
                             button.setAttribute('id', 'Cancelled');
                             button.setAttribute('class', 'Book');
@@ -230,5 +237,8 @@ function c_stat() {
         c_body.appendChild(strong);
     button.setAttribute('onclick', 'task(this.id, C_Arr["c"]);');
     document.getElementById('Cancelled').innerHTML = 'CANCEL';
+    if(C_Arr['c'].status=='Accepted'){
+        document.getElementById('Completed').innerHTML = 'DONE';
+    }
     stat_up(C_Arr['c']);
 }

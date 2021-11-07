@@ -5,7 +5,7 @@ $password=$_POST['pass'];
 if(isset($email))
 	{
 	$conn = mysqli_connect("localhost", "root", "", "awm");
-	$result=mysqli_query($conn,"SELECT id_no, email_id, password from customer where email_id='$email'");
+	$result = mysqli_query($conn,"SELECT id_no, email_id, password from customer where email_id='$email'");
 	$temp = mysqli_num_rows($result);
 	if($temp>0){
 		while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){

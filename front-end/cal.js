@@ -13,7 +13,8 @@ function Table(Table) {
         }
         document.getElementById('Book'+h).value = 'Book';
         document.getElementById('Book'+h).name = Table[h].id_no;
-        document.getElementById('rating'+h).innerHTML = 'NR';
+        var x = document.getElementById('rating'+h);
+        rat(x, Table[h]);
         h++;
     }
 }

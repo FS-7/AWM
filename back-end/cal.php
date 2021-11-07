@@ -8,14 +8,18 @@ if($func=='stat'){
     }else{
         new c_stat();
     }
+}elseif($func == 'rt'){
+    new rt($func);
 }elseif($func == 'Cancelled'){
     new cancel($func);
 }elseif($func == 'book'){
     new book();    
 }elseif($func == 'Accepted'){
-    new acc();
+    new acc($func);
 }elseif($func == 'Rejected'){
-    new rej();
+    new rej($func);
+}elseif($func == 'Completed'){
+    new comp($func);
 }else{
     echo 'Wrong function motherfucker';
 }
@@ -48,6 +52,17 @@ class c_stat{
     }
 }
 
+class rt{
+    public function __construct($func) {
+        $req_id = $_POST['request_id'];
+        $conn = mysqli_connect("localhost", "root", "", "awm");
+        $q = mysqli_query($conn, "SELECT AVG(rating) FROM feedback, mechanic WHERE m_id='$req_id' AND mechanic.id_no=feedback.m_id");
+        $row = mysqli_fetch_array($q, MYSQLI_NUM);
+        echo $row[0]; 
+        mysqli_close($conn);
+    }
+}
+
 class book{
     public function __construct() {
         $cid = $_SESSION['id'];
@@ -62,7 +77,7 @@ class book{
 }
 
 class acc{
-    public function __construct(){
+    public function __construct($func){
         $req_id = $_POST['request_id'];
         $conn = mysqli_connect("localhost", "root", "", "awm");
         $q = mysqli_query($conn, "UPDATE `service_log` SET `status` = '$func' WHERE `service_log`.`request_id` = '$req_id'");
@@ -71,7 +86,7 @@ class acc{
 }
 
 class rej{
-    public function __construct(){
+    public function __construct($func){
         $req_id = $_POST['request_id'];
         $conn = mysqli_connect("localhost", "root", "", "awm");
         $q = mysqli_query($conn, "UPDATE `service_log` SET `status` = '$func' WHERE `service_log`.`request_id` = '$req_id'");
@@ -80,6 +95,15 @@ class rej{
 }
 
 class cancel{
+    public function __construct($task){
+        $req_id = $_POST['request_id'];
+        $conn = mysqli_connect("localhost", "root", "", "awm");
+        $q = mysqli_query($conn, "UPDATE `service_log` SET `status` = '$task' WHERE `service_log`.`request_id` = '$req_id'");
+        mysqli_close($conn);
+    }
+}
+
+class comp{
     public function __construct($task){
         $req_id = $_POST['request_id'];
         $conn = mysqli_connect("localhost", "root", "", "awm");

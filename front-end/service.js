@@ -173,3 +173,17 @@ function task(task, val) {
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("func="+task+"&request_id="+val.request_id);
 }
+
+function rat(y, id) {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function() {
+        if(!this.responseText==''){
+            y.innerHTML = parseInt(this.responseText)+'&#9733;';
+        }else{
+            y.innerHTML = 'NR&#9733;';
+        }
+    }
+    xmlhttp.open("POST", "../back-end/cal.php");
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("func=rt&request_id="+id.id_no);
+}

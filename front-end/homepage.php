@@ -36,7 +36,6 @@ if(isset($_SESSION['id']) && isset($_SESSION['type'])){
                         echo "a = document.createElement('a'); a.setAttribute('href', 'feedback.php'); a.innerHTML = 'Feedback'; x.appendChild(a);</script>";
                         }
                         ?>
-                        <a href="">Contact</a>
                         <a href="../back-end/logout.php">Logout</a>
                     </div>
                 </div>
