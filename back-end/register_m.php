@@ -7,8 +7,8 @@ $password=$_POST['password'];
 $aadhar=$_POST['aadhar'];
 $garlat=$_POST['garlat'];
 $garlng=$_POST['garlng'];
-$sql=mysqli_query($conn, "insert into mechanic values( null, '$aadhar','$name','$phone_no','$email_id','$password', '', '')");
-if($sql>0){
+$sql=mysqli_query($conn, "insert into mechanic values(null, null, '$aadhar','$name','$phone_no','$email_id','$password', '$garlat', '$garlng', null)");
+if($sql!=0){
     ?>
     <script>
         alert("Registered Successfully");
@@ -19,7 +19,7 @@ if($sql>0){
     ?>
     <script>
         alert("Try Again to Register");
-        window.location.href="front-end/Register.html";
+        window.location.href="../front-end/Register1.html";
     </script>
     <?php
 }

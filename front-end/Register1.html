@@ -1,95 +1,122 @@
 <!doctype html>
 <html lang="en">
-  <head>
-  	<title>Login</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
-
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" href="style2.css">
-
+	<head>
+		<title>Login</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="style2.css">
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+		<style>
+			.map{
+				height: 500px;
+				width: 500px;
+				align-items: center;
+			}
+		</style>
 	</head>
 	<body>
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<!--<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Sign</h2>
-				</div>-->
-				
-			</div>
+		<section class="ftco-section">
 			<div class="row justify-content-center">
 				<div class="col-md-12 col-lg-10">
 					<div class="wrap d-md-flex">
-						<div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
-							<div class="text w-100">
+						<div class="text-wrap p-4 p-lg-5 align-items-center text-center order-md-last">
+							<div class="text w-100" style="transform: translateY(100%);">
 								<h2>Welcome to AWM</h2>
 								<a href="../index.html" class="btn btn-white btn-outline-white">Login</a>
-							</div>
+							</div><br>
+							<center><div class="map" id="map" style="transform: translateY(50%);"></div></center>
+							<script>
+								const platform = new H.service.Platform({ apikey: 'D_6Bq02OZ4b2BBwXAJYFlZ6yHIixKl0Q5ym9lUlNhxg' });
+								const defaultLayers = platform.createDefaultLayers();
+								const map = new H.Map(document.getElementById('map'),
+									defaultLayers.vector.normal.map, {
+									center: { lat: 15.3425, lng: 75.1475 },
+									zoom: 11,
+									pixelRatio: window.devicePixelRatio || 1
+								});
+
+								window.addEventListener('resize', () => map.getViewPort().resize());
+								const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+								function setUpClickListener(map) {
+									map.addEventListener('tap', function (evt) {
+										var coord = map.screenToGeo(evt.currentPointer.viewportX, evt.currentPointer.viewportY);
+										lat = Math.abs(coord.lat.toFixed(4)); 
+										lng = Math.abs(coord.lng.toFixed(4));
+										document.getElementById('garlat').value=lat;
+										document.getElementById('garlng').value=lng;
+										document.getElementById('garlat').innerHTML=lat;
+										document.getElementById('garlng').innerHTML=lng;
+										console.log(document.getElementById('garlat'));
+									});
+								}
+								setUpClickListener(map);
+								var password = document.getElementById("password"), confirm_password = document.getElementById("confirm_password");
+
+								function validatePassword(){
+										if(password.value != confirm_password.value) {
+											confirm_password.setCustomValidity("Passwords Don't Match");
+										} else {
+											confirm_password.setCustomValidity('');
+										}
+									}
+									password.onchange = validatePassword;
+									confirm_password.onkeyup = validatePassword;
+							</script>
 			      		</div>
 						<div class="login-xwrap p-lg-5">
-			      		<div class="d-flex">
-			      			<div class="w-100">
-			      				<h3 class="mb-4">Sign up</h3>
-			      			</div>
-							  <div id="maps"></div>
-							  <script src="init.js"></script>
-
-						<form action="../back-end/register_m.php" class="signin-form">
-			      		<div class="form-group mb-3">
-			      			<label class="label" for="name">Name</label>
-			      			<input type="text" class="form-control" name="name" placeholder="Name" required>
-			      		</div>
-						  <div class="form-group mb-3">
-							<label class="label" for="name">Phone number</label>
-							<input type="text" class="form-control" name="phone_no" placeholder="Number" required>
+			      			<div class="d-flex">
+			      				<div class="w-100">
+			      					<h3 class="mb-4">Sign up</h3>
+										<form action="../back-end/register_m.php" method="POST" class="signin-form">
+			      							<div class="form-group mb-3">
+												<label class="label" for="name">Name</label>
+												<input type="text" class="form-control" name="name" placeholder="Name" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Phone number</label>
+												<input type="text" class="form-control" name="phone_no" placeholder="Number" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Email</label>
+												<input type="email" class="form-control" name="email_id" placeholder="Email" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">password</label>
+												<input type="password" id="password" class="form-control" name="password" placeholder="Password" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Re-Enter password</label>
+												<input type="password" id="confirm_password" class="form-control" placeholder="Re-Enter" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Garage location in latitude</label>
+												<input type="text" id="garlat" class="form-control" placeholder="Please enter from map" name="garlat" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Garage location in longitude</label>
+												<input type="text" id="garlng" class="form-control" placeholder="Please enter from map" name="garlng" required>
+											</div>
+											<div class="form-group mb-3">
+												<label class="label" for="name">Aadhar No</label>
+												<input type="text" class="form-control" name="aadhar" placeholder="Aadhar" required>
+											</div>
+											<div class="form-group">
+		            							<button type="submit" class="form-control btn btn-primary submit px-3" value="submit">Submit</button>
+		            						</div>
+		            						<a href="Register.html">Customer Registration</a>
+		          						</form>
+									</div>
+		        				</div>
+							</div>
 						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">Email</label>
-							<input type="text" class="form-control" name="email_id" placeholder="Email" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">password</label>
-							<input type="text" class="form-control" name="password" placeholder="Password" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">Re-Enter password</label>
-							<input type="text" class="form-control" placeholder="Re-Enter" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">Garage location in latitude</label>
-							<input type="text" class="form-control" name="garlat" placeholder="Password" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">Garage location in longitude</label>
-							<input type="text" class="form-control" name="garlng" placeholder="Password" required>
-						</div>
-						<div class="form-group mb-3">
-							<label class="label" for="name">Aadhar No</label>
-							<input type="text" class="form-control" name="aadhar" placeholder="Aadhar" required>
-						</div>
-						<div class="form-group">
-		            	<button type="submit" class="form-control btn btn-primary submit px-3">Submit</button>
-		            </div>
-		            <a href="Register.html">Customer Registration</a>
 					</div>
-		            </div>
-		          </form>
-		        </div>
-		      </div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<script src="service.js"></script>
-	<script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
-
+		</section>
 	</body>
 </html>
-

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2021 at 11:13 AM
+-- Generation Time: Nov 09, 2021 at 08:03 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -36,15 +36,6 @@ CREATE TABLE `customer` (
   `password` varchar(64) NOT NULL,
   `vehicle` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`imgname`, `id_no`, `name`, `phone_no`, `email_id`, `password`, `vehicle`) VALUES
-(NULL, 103, 'Mansoor', 1345678765, 'jhgfdsa@gmail.com', 'sdfkcvbtk', NULL),
-(NULL, 104, 'TEST', 999999999, 'test@gmail.com', 'admin', NULL),
-(NULL, 105, 'Adil', 9876543466, 'admin@gmail.com', '1234', NULL);
 
 -- --------------------------------------------------------
 
@@ -79,15 +70,6 @@ CREATE TABLE `mechanic` (
   `model_no` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `mechanic`
---
-
-INSERT INTO `mechanic` (`imgname`, `id_no`, `adhaar_no`, `name`, `phone_no`, `email_id`, `password`, `gar_loc_lat`, `gar_loc_lng`, `model_no`) VALUES
-('', 1, 123456789012, 'Faizan', 2345673456, 'fs@gmail.com', 'admin', 15.3465, 75.1455, NULL),
-('', 11, 123456789013, 'safsfgas', 8765453232, 'hhdfdsfas@gmail.com', 'wertyuiop', 15, 75, NULL),
-(NULL, 12, 765431234533, 'sdfghjtyu', 6789234568, 'asdfghj@gmail.com', 'zwsexdrcfvgbhn', 15.1194, 75.4706, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -105,17 +87,6 @@ CREATE TABLE `service_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `service_log`
---
-
-INSERT INTO `service_log` (`c_id`, `m_id`, `c_loc_lat`, `c_loc_lon`, `status`, `date`, `request_id`) VALUES
-(104, 11, 15.1274, 75.1244, 'Cancelled', '2021-11-03 22:02:17.1', 1033),
-(104, 1, 15.4607, 75.0029, 'Cancelled', '2021-11-03 22:07:00.4', 1034),
-(104, 12, 15.0866, 75.2846, 'Cancelled', '2021-11-03 22:07:50.2', 1035),
-(104, 11, 14.993, 75.2166, 'Cancelled', '2021-11-03 22:12:16.2', 1036),
-(104, 1, 15.1552, 75.1449, '', '2021-11-03 22:12:41.3', 1037);
-
---
 -- Indexes for dumped tables
 --
 
@@ -123,7 +94,8 @@ INSERT INTO `service_log` (`c_id`, `m_id`, `c_loc_lat`, `c_loc_lon`, `status`, `
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
-  ADD PRIMARY KEY (`id_no`);
+  ADD PRIMARY KEY (`id_no`),
+  ADD UNIQUE KEY `phone_no` (`phone_no`,`email_id`);
 
 --
 -- Indexes for table `feedback`
@@ -136,7 +108,9 @@ ALTER TABLE `feedback`
 -- Indexes for table `mechanic`
 --
 ALTER TABLE `mechanic`
-  ADD PRIMARY KEY (`id_no`);
+  ADD PRIMARY KEY (`id_no`),
+  ADD UNIQUE KEY `phone_no` (`phone_no`,`email_id`),
+  ADD UNIQUE KEY `email_id` (`email_id`);
 
 --
 -- Indexes for table `service_log`
@@ -160,13 +134,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `mechanic`
 --
 ALTER TABLE `mechanic`
-  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_no` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `service_log`
 --
 ALTER TABLE `service_log`
-  MODIFY `request_id` bigint(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1038;
+  MODIFY `request_id` bigint(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1054;
 
 --
 -- Constraints for dumped tables
