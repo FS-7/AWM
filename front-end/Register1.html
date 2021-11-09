@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title>Register</title>
+  	<title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -30,15 +30,15 @@
 								<a href="../index.html" class="btn btn-white btn-outline-white">Login</a>
 							</div>
 			      		</div>
-						  
 						<div class="login-xwrap p-lg-5">
-			      	<div class="d-flex">
-			      		<div class="w-100">
-			      			<h3 class="mb-4">Sign up</h3>
-			      		</div>
-				
-			      	</div>
-							<form action="../back-end/register.php" class="signin-form" method="post">
+			      		<div class="d-flex">
+			      			<div class="w-100">
+			      				<h3 class="mb-4">Sign up</h3>
+			      			</div>
+							  <div id="maps"></div>
+							  <script src="init.js"></script>
+
+						<form action="../back-end/register_m.php" class="signin-form">
 			      		<div class="form-group mb-3">
 			      			<label class="label" for="name">Name</label>
 			      			<input type="text" class="form-control" name="name" placeholder="Name" required>
@@ -49,7 +49,7 @@
 						</div>
 						<div class="form-group mb-3">
 							<label class="label" for="name">Email</label>
-							<input type="text" class="form-control" name="email_id" placeholder="Email"   required>
+							<input type="text" class="form-control" name="email_id" placeholder="Email" required>
 						</div>
 						<div class="form-group mb-3">
 							<label class="label" for="name">password</label>
@@ -57,12 +57,24 @@
 						</div>
 						<div class="form-group mb-3">
 							<label class="label" for="name">Re-Enter password</label>
-							<input type="text" class="form-control" name="rpassword" placeholder="Re-Enter" required>
+							<input type="text" class="form-control" placeholder="Re-Enter" required>
+						</div>
+						<div class="form-group mb-3">
+							<label class="label" for="name">Garage location in latitude</label>
+							<input type="text" class="form-control" name="garlat" placeholder="Password" required>
+						</div>
+						<div class="form-group mb-3">
+							<label class="label" for="name">Garage location in longitude</label>
+							<input type="text" class="form-control" name="garlng" placeholder="Password" required>
+						</div>
+						<div class="form-group mb-3">
+							<label class="label" for="name">Aadhar No</label>
+							<input type="text" class="form-control" name="aadhar" placeholder="Aadhar" required>
 						</div>
 						<div class="form-group">
-		            	<input type="submit" class="form-control btn btn-primary submit px-3" value="submit">
+		            	<button type="submit" class="form-control btn btn-primary submit px-3">Submit</button>
 		            </div>
-		            <a href="Register1.html">Mechanic Registration</a> 
+		            <a href="Register.html">Customer Registration</a>
 					</div>
 		            </div>
 		          </form>
@@ -72,7 +84,7 @@
 			</div>
 		</div>
 	</section>
-
+	<script src="service.js"></script>
 	<script src="js/jquery.min.js"></script>
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
