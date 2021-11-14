@@ -4,7 +4,7 @@ $name=$_POST['name'];
 $phone_no=$_POST['phone_no'];
 $email_id=$_POST['email_id'];
 $password=$_POST['password'];
-$sql=mysqli_query($conn, "insert into customer values( null,'$name','$phone_no','$email_id','$password')");
+$sql=mysqli_query($conn, "insert into customer values( null, null,'$name','$phone_no','$email_id','$password',null)");
 if($sql>0){
     ?>
     <script>
@@ -16,7 +16,7 @@ if($sql>0){
     ?>
     <script>
     alert("Try Again to Register");
-    window.location.href="front-end/Register.html";
+    window.location.href="../front-end/Register.html";
     </script>
     <?php
 }

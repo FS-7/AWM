@@ -21,7 +21,7 @@ if($func=='stat'){
 }elseif($func == 'Completed'){
     new comp($func);
 }else{
-    echo 'Wrong function motherfucker';
+    echo 'Wrong function';
 }
 
 class m_stat{
